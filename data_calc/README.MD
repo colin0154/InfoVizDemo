@@ -1,16 +1,26 @@
-**Sorry For the Chinese, I'm not in the mood to write in English.**
+**Sorry For the Chinese, I'm not in the mood writing English.**
 
-# 这个文件夹是做什么的？
+## 这个文件夹是做什么的？
 
 从NCD.RisC里下载的数据集是以csv格式保存的，而且数据结构也不符合我程序的设计，所以需要先进行转化。
 
-大概思路是这样的：首先是在[https://www.csvjson.com/csv2json](CSVJSON)网站把csv转换成json（非常感谢这个网站，节省了很多功夫），随后我写了一个简单的Node.js脚本，按照下面的方式重新导出一份json。
+大概思路是这样的：首先是在[CSVJSON](https://www.csvjson.com/csv2json)网站把csv转换成json（非常感谢这个网站，节省了很多功夫），随后我写了一个简单的Node.js脚本，按照下面的方式重新导出一份json。
 
 原数据我猜有小数点后十位？新的数据把患病率转换成了百分比，然后只保留小数点后一位，因为最后前端也只呈现后一位。
 
 用C#的话来说，这整个过程很像Serialization？把Object保存出来，下次直接读取就能用了。
 
-## 旧的结构
+## 人均GDP与国家代码（新增）
+
+我忘了还有人均GDP的数据要做，之后导出来两份json，一份是按 `{ 国家代码: [人均GDP] }`的，另一份就单纯只是`{ 国家代码: "中文名"}`。
+
+大概操作跟患病率是一样的，只是在网上转换的时生成的旧数据结构不一样，一个是Array，另一个是Hash（我直接当作Object来看）。这样我才能在Array中for each的时候，直接读取另一个数据集中对应的数据。
+
+本以为会跑很久的，花了一小时写的脚本，结果按下回车的一瞬间就处理完了。不得不佩服JavaScript的处理速度（以及不用编译）。就只是脚本写起来头疼，loose your type, lose my mind.
+
+## 患病率数据结构
+
+### 旧的结构
 
 ~~~JSON
 [
@@ -40,7 +50,7 @@
 
 （不合理是因为，我不可能每次查询数据都来一个foreach，然后还得判断国家名和年份，这谁顶得住啊）
 
-##新的结构
+### 新的结构
 
 ```JSON
 {
