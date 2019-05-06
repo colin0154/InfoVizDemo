@@ -59,7 +59,7 @@ export class WorldAtlasView extends View {
                         .attr("class", "country")
                         .attr("d", this._path)
                         // On mouse click, it will emit an event with correspond country code.
-                        .on("click", (d: any) => console.log(d.properties.ISO_A3));   
+                        .on("click", (d: any) => console.log(d.properties.WB_A3));   
 
         // Draw graticule.
         this._selection.select("g#Graticule")
