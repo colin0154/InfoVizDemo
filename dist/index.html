@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>信息可视化大作业Demo</title>
+    <style>
+        .country {
+            fill: #f0e4dd;
+            stroke: #e0cabc;
+            stroke-width: 0.5;
+        }
+        .country:hover {
+            fill: #333333;
+            stroke: #fff000;
+        }
+        .graticule {
+            fill: none;
+            stroke: #777;
+            stroke-width: .5px;
+            stroke-opacity: .5;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <svg id="WorldAtlas" width="1280" height="650">
+            <rect width="1280" height="650" fill="#f0f0f0"></rect>
+            <g id="Maps"></g>
+            <g id="Graticule"></g>
+        </svg>
+        <input id="RotateLeft" type="button" value="Left" />
+        <input id="RotateRight" type="button" value="Right" />
+        <input id="RotateUp" type="button" value="Up" />
+        <input id="RotateDown" type="button" value="Down" />
+        <input id="ZoomIn" type="button" value="Zoom In" />
+        <input id="ZoomOut" type="button" value="Zoom Out" />
+    </div>
+    
+
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script type="module" src="./scripts/main.js"></script>
+</body>
+</html>
