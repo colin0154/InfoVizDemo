@@ -4,44 +4,46 @@ import { FeatureCollection } from "geojson";
 import { GeoPath, GeoProjection, geoPath, select } from "d3";
 
 export class WorldAtlasView extends View {
+    //#region Properties
     // _selection inherited from View class.
     // _data inherited from View class.
-    private _path: GeoPath;
-    private _projection: GeoProjection;
+    private path: GeoPath;
+    private projection: GeoProjection;
 
     // Projection rotation and zoom controller.
-    private readonly _buttonRotateLeft: HTMLElement = document.getElementById("RotateLeft");
-    private readonly _buttonRotateRight: HTMLElement = document.getElementById("RotateRight");
-    private readonly _buttonRotateUp: HTMLElement = document.getElementById("RotateUp");
-    private readonly _buttonRotateDown: HTMLElement = document.getElementById("RotateDown");
-    private readonly _buttonZoomIn: HTMLElement = document.getElementById("ZoomIn");
-    private readonly _buttonZoomOut: HTMLElement = document.getElementById("ZoomOut");
+    private readonly btnRotateLeft: HTMLElement = document.getElementById("RotateLeft");
+    private readonly btnRotateRight: HTMLElement = document.getElementById("RotateRight");
+    private readonly btnRotateUp: HTMLElement = document.getElementById("RotateUp");
+    private readonly btnRotateDown: HTMLElement = document.getElementById("RotateDown");
+    private readonly btnZoomIn: HTMLElement = document.getElementById("ZoomIn");
+    private readonly btnZoomOut: HTMLElement = document.getElementById("ZoomOut");
 
     // Euler angles for projection rotation, zoom for scale.
-    private _rotationYaw: number = 0;
-    private _rotationPitch: number = 0;
-    private _rotationRoll: number = 0;
-    private _zoom: number = 250;
+    private rotationYaw: number = 0;
+    private rotationPitch: number = 0;
+    private rotationRoll: number = 0;
+    private zoom: number = 250;
+    //#endregion
 
     public constructor(selector: string, dataSet: FeatureCollection){
         // Hard code selector and data set.
         super(selector, dataSet);
         
         // Add listener to buttons controlling the rotation.
-        this._buttonRotateLeft.onclick = () => { this.rotate("LEFT") };
-        this._buttonRotateRight.onclick = () => { this.rotate("RIGHT") };
-        this._buttonRotateUp.onclick = () => { this.rotate("UP") };
-        this._buttonRotateDown.onclick = () => { this.rotate("DOWN") };
-        this._buttonZoomIn.onclick = () => { this.rotate("IN") };
-        this._buttonZoomOut.onclick = () => { this.rotate("OUT") };
+        this.btnRotateLeft.onclick = () => { this.rotate(WorldAtlasView.Rotation.Left) };
+        this.btnRotateRight.onclick = () => { this.rotate(WorldAtlasView.Rotation.Right) };
+        this.btnRotateUp.onclick = () => { this.rotate(WorldAtlasView.Rotation.Up) };
+        this.btnRotateDown.onclick = () => { this.rotate(WorldAtlasView.Rotation.Down) };
+        this.btnZoomIn.onclick = () => { this.rotate(WorldAtlasView.Rotation.ZoomIn) };
+        this.btnZoomOut.onclick = () => { this.rotate(WorldAtlasView.Rotation.ZoomOut) };
         
         this.render();
     }
 
     protected render(): void {
         // using Orthographic Projection.
-        this._projection = d3.geoOrthographic().translate([640, 360]).rotate([this._rotationYaw, this._rotationPitch, this._rotationRoll]).scale(this._zoom);
-        this._path = d3.geoPath().projection(this._projection);
+        this.projection = d3.geoOrthographic().translate([640, 360]).rotate([this.rotationYaw, this.rotationPitch, this.rotationRoll]).scale(this.zoom);
+        this.path = d3.geoPath().projection(this.projection);
 
         // Graticule definition.
         const graticule = d3.geoGraticule().step([30, 30]);
@@ -50,54 +52,54 @@ export class WorldAtlasView extends View {
         // this._selection.selectAll("path").remove();
 
         // And draw new one.
-        this._selection.select("g#Maps")
+        this.selection.select("g#Maps")
                         .selectAll("path.country")
-                        .data(this._data.features)
-                        .attr("d", this._path)
+                        .data(this.data.features)
+                        .attr("d", this.path)
                         .enter()
                         .append("path")
                         .attr("class", "country")
-                        .attr("d", this._path)
+                        .attr("d", this.path)
                         // On mouse click, it will emit an event with correspond country code.
                         .on("click", (d: any) => console.log(d.properties.ISO_A3));   
 
         // Draw graticule.
-        this._selection.select("g#Graticule")
+        this.selection.select("g#Graticule")
                         .selectAll("path.graticule")
                         .data(graticule.lines())
-                        .attr("d", this._path)
+                        .attr("d", this.path)
                         .enter()
                         .append("path")
                         .attr("class", "graticule")
-                        .attr("d", this._path);
+                        .attr("d", this.path);
     }
 
-    private rotate(direction: string): void {
+    private rotate(direction: WorldAtlasView.Rotation): void {
         // Compensate for scale, will rotate a smaller degree when zoom in.
         // scaleFactor can't be more than 1;
-        const scaleFactor: number = this._zoom <= 250 ? 1 : 150 / this._zoom;
+        const scaleFactor: number = this.zoom <= 250 ? 1 : 150 / this.zoom;
         const finalRotationYaw = 30 * scaleFactor;
         const finalRotationPitch = 15 * scaleFactor;
 
         switch(direction){
-            case "LEFT":
+            case WorldAtlasView.Rotation.Left:
                 // I don't want to make the degree larger than 180.
-                this._rotationYaw -= this._rotationYaw <= -180 ? -(360 - finalRotationYaw) : finalRotationYaw;
+                this.rotationYaw -= this.rotationYaw <= -180 ? -(360 - finalRotationYaw) : finalRotationYaw;
                 break;
-            case "RIGHT":
-                this._rotationYaw += this._rotationYaw >= 180 ? -(360 - finalRotationYaw) : finalRotationYaw;
+            case WorldAtlasView.Rotation.Right:
+                this.rotationYaw += this.rotationYaw >= 180 ? -(360 - finalRotationYaw) : finalRotationYaw;
                 break;
-            case "UP":
-                this._rotationPitch += this._rotationPitch >= 60 ? 0 : finalRotationPitch;
+            case WorldAtlasView.Rotation.Up:
+                this.rotationPitch += this.rotationPitch >= 60 ? 0 : finalRotationPitch;
                 break;
-            case "DOWN":
-                this._rotationPitch -= this._rotationPitch <= -60 ? 0 : finalRotationPitch;
+            case WorldAtlasView.Rotation.Down:
+                this.rotationPitch -= this.rotationPitch <= -60 ? 0 : finalRotationPitch;
                 break;
-            case "IN":
-                this._zoom += this._zoom >= 700 ? 0 : 25;
+            case WorldAtlasView.Rotation.ZoomIn:
+                this.zoom += this.zoom >= 700 ? 0 : 25;
                 break;
-            case "OUT":
-                this._zoom -= this._zoom <= 150 ? 0 : 25;
+            case WorldAtlasView.Rotation.ZoomOut:
+                this.zoom -= this.zoom <= 150 ? 0 : 25;
                 break;
             default:
                 return;
@@ -106,3 +108,17 @@ export class WorldAtlasView extends View {
         this.render();
     }
 }
+
+//#region Enums
+// This is a workaround to use enum in a Typscript Class.
+export namespace WorldAtlasView {
+    export enum Rotation {
+        Left,
+        Right,
+        Up,
+        Down,
+        ZoomIn,
+        ZoomOut
+    }
+}
+//#endregion
