@@ -5,7 +5,7 @@ export class DataManager {
     //#region Singleton
     private static instance: DataManager;
 
-    private constructor(){};
+    private constructor(){}
 
     public static get Instance(): DataManager {
         if (!DataManager.instance) {
@@ -17,80 +17,86 @@ export class DataManager {
 
     //#region DataSets
     private worldGeoPath: FeatureCollection;
-    private bmiFemale: any;
-    private bmiMale: any;
-    private countryName: any;
-    private perCapita: any;
-    private isDataSet: boolean = false;
+    private dataset: Map<string, any>;
 
     public setData(data: Array<any>): void {
-        if (this.isDataSet) {
-            console.log("Error: Data has already been set.");
+        if (this.worldGeoPath != null || this.dataset != null) {
+            console.log("Warning: Data has already been set.");
             return;
         }
 
-        // [geoPath, femaleBMI, maleBMI, countryName, perCapita]
         this.worldGeoPath = data[0];
-        this.bmiFemale = data[1];
-        this.bmiMale = data[2];
-        this.countryName = data[3];
-        this.perCapita = data[4]
-        this.isDataSet = true;
+        // Reverse from Array to Map.
+        this.dataset = new Map(data[1]);
     }
     //#endregion
 
     //#region Global States
-    private currentYear: number = 2016;
-    private currentCountry: string = "CHN";
-    private currentSex: DataManager.Sex = DataManager.Sex.Male;
-    private currentDataType: DataManager.Type = DataManager.Type.Mean;
+    private selectedYear: number = 2016;
+    private selectedCountry: string = "CHN";
+    private selectedField: DataManager.Field = DataManager.Field.Mean;
     //#endregion
 
     //#region Data Accessors
     public get WorldGeoPath(): FeatureCollection {
-        if (!this.worldGeoPath) {
-            console.log("Error: World atlas data is null.");
-            return;
-        }
         return this.worldGeoPath;
     }
     
-    public GetBMI(): number {
-        const targetSet = this.querySex();
-        return targetSet[this.currentCountry][this.queryType()][this.currentYear - 1975];
+    public GetBMI(): any {
+        const country: any = this.dataset.get(this.selectedCountry);
+        const field: string = this.getSelectedField();
+        const year: number = this.selectedYear - 1975;
+
+        return country[field][year];
     }
 
     // Return the country's all BMI data since 1975.
-    public GetBMIAll(): Array<number> {
-        const targetSet = this.querySex();
-        return targetSet[this.currentCountry][this.queryType()];
+    public GetBMIAllYear(): Array<number> {
+        const country: any = this.dataset.get(this.selectedCountry);
+        const field: string = this.getSelectedField();
+
+        return country[field];
     }
 
-    public GetCountry(code: string = this.currentCountry): string {
-        return this.countryName[code];
+    // Return all countries's BMI data in selected year.
+    public getBMIAllCountry(): Array<number> {
+        throw "I don't think this method is a good idea.";
+        
+        const field: string = this.getSelectedField();
+        const year: number = this.selectedYear - 1975;
+        const output: Array<number> = [];
+
+        this.dataset.forEach(element => {
+            output.push(element[field][year]);
+        })
+
+        return output;
+    }
+
+    public GetCountryName(code: string = this.selectedCountry): string {
+        return this.dataset.get(code)["Name"];
     }
     //#endregion
 
     //#region BMI data accessors helper funciton
-    private querySex(): any {
-        return this.currentSex == DataManager.Sex.Male ? this.bmiMale : this.bmiFemale;
-    }
+    // Return the correspond data set(female or male).
 
-    private queryType(): string {
-        switch (this.currentDataType) {
-            case DataManager.Type.Mean:
+    // Return the property name.
+    private getSelectedField(): string {
+        switch (this.selectedField) {
+            case DataManager.Field.Mean:
                 return "Mean";
                 break;
-            case DataManager.Type.UnderWeight:
+            case DataManager.Field.UnderWeight:
                 return "UnderWeight";
                 break;
-            case DataManager.Type.Obesity:
+            case DataManager.Field.Obesity:
                 return "Obesity";
                 break;
-            case DataManager.Type.Severe:
+            case DataManager.Field.Severe:
                 return "Severe";
                 break;
-            case DataManager.Type.Morbid:
+            case DataManager.Field.Morbid:
                 return "Morbid";
                 break;
         }
@@ -101,12 +107,7 @@ export class DataManager {
 //#region Enums
 // This is a workaround to use enum in a Typscript Class.
 export namespace DataManager {
-    export enum Sex {
-        Male,
-        Female
-    }
-
-    export enum Type {
+    export enum Field {
         Mean,
         UnderWeight,
         Obesity,

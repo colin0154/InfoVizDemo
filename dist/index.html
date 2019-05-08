@@ -26,20 +26,24 @@
 
 <body>
     <div class="container">
-        <svg id="WorldAtlas" width="1280" height="650">
-            <rect width="1280" height="650" fill="#f0f0f0"></rect>
-            <g id="Maps"></g>
-            <g id="Graticule"></g>
-        </svg>
-        <input id="RotateLeft" type="button" value="Left" />
-        <input id="RotateRight" type="button" value="Right" />
-        <input id="RotateUp" type="button" value="Up" />
-        <input id="RotateDown" type="button" value="Down" />
-        <input id="ZoomIn" type="button" value="Zoom In" />
-        <input id="ZoomOut" type="button" value="Zoom Out" />
+        <div class="header"></div>
+        <div class="nav"></div>
+        <div class="BMIDetail"></div>
+        <div class="WorldMap">
+            <svg id="WorldAtlas" width="1280" height="650">
+                <rect width="1280" height="650" fill="#f0f0f0"></rect>
+                <g id="Maps"></g>
+                <g id="Graticule"></g>
+            </svg>
+            <input id="RotateLeft" type="button" value="Left" />
+            <input id="RotateRight" type="button" value="Right" />
+            <input id="RotateUp" type="button" value="Up" />
+            <input id="RotateDown" type="button" value="Down" />
+            <input id="ZoomIn" type="button" value="Zoom In" />
+            <input id="ZoomOut" type="button" value="Zoom Out" />
+        </div>
+        <div class="LineChart"></div>
     </div>
-    
-
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script type="module" src="./scripts/main.js"></script>
 </body>
