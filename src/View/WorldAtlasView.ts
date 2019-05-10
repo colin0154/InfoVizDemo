@@ -2,32 +2,48 @@ import { View } from "./View";
 import * as d3 from "d3";
 import { FeatureCollection } from "geojson";
 import { GeoPath, GeoProjection, geoPath, select } from "d3";
+import { DataManager } from "../Model/DataManager";
 
 export class WorldAtlasView extends View {
     //#region Properties
     // _selection inherited from View class.
-    // _data inherited from View class.
+    private readonly geoJson: FeatureCollection;
     private path: GeoPath;
     private projection: GeoProjection;
+    private container: any;
 
     // Projection rotation and zoom controller.
-    private readonly btnRotateLeft: HTMLElement = document.getElementById("RotateLeft");
-    private readonly btnRotateRight: HTMLElement = document.getElementById("RotateRight");
-    private readonly btnRotateUp: HTMLElement = document.getElementById("RotateUp");
-    private readonly btnRotateDown: HTMLElement = document.getElementById("RotateDown");
-    private readonly btnZoomIn: HTMLElement = document.getElementById("ZoomIn");
-    private readonly btnZoomOut: HTMLElement = document.getElementById("ZoomOut");
+    private readonly btnRotateLeft: HTMLElement;
+    private readonly btnRotateRight: HTMLElement;
+    private readonly btnRotateUp: HTMLElement;
+    private readonly btnRotateDown: HTMLElement;
+    private readonly btnZoomIn: HTMLElement;
+    private readonly btnZoomOut: HTMLElement;
 
     // Euler angles for projection rotation, zoom for scale.
-    private rotationYaw: number = 0;
-    private rotationPitch: number = 0;
-    private rotationRoll: number = 0;
-    private zoom: number = 250;
+    private rotationYaw: number;
+    private rotationPitch: number;
+    private rotationRoll: number;
+    private zoom: number;
     //#endregion
 
-    public constructor(selector: string, dataSet: FeatureCollection){
+    public constructor(){
         // Hard code selector and data set.
-        super(selector, dataSet);
+        super();
+        this.geoJson = this.dataManager.GeoJson;
+
+        this.rotationYaw = 0;
+        this.rotationPitch = 0;
+        this.rotationRoll = 0;
+        this.zoom = 250;
+
+        // Get DOM button references.
+        this.btnRotateLeft = document.getElementById("RotateLeft");
+        this.btnRotateRight = document.getElementById("RotateRight");
+        this.btnRotateUp = document.getElementById("RotateUp");
+        this.btnRotateDown = document.getElementById("RotateDown");
+        this.btnZoomIn = document.getElementById("ZoomIn");
+        this.btnZoomOut = document.getElementById("ZoomOut");
         
         // Add listener to buttons controlling the rotation.
         this.btnRotateLeft.onclick = () => { this.rotate(WorldAtlasView.Rotation.Left) };
@@ -52,26 +68,26 @@ export class WorldAtlasView extends View {
         // this._selection.selectAll("path").remove();
 
         // And draw new one.
-        this.selection.select("g#Maps")
-                        .selectAll("path.country")
-                        .data(this.data.features)
-                        .attr("d", this.path)
-                        .enter()
-                        .append("path")
-                        .attr("class", "country")
-                        .attr("d", this.path)
-                        // On mouse click, it will emit an event with correspond country code.
-                        .on("click", (d: any) => console.log(d.properties.ISO_A3));   
+        d3.select("g#Maps")
+            .selectAll("path.country")
+            .data(this.geoJson.features)
+            .attr("d", this.path)
+            .enter()
+            .append("path")
+            .attr("class", "country")
+            .attr("d", this.path)
+            // On mouse click, it will emit an event with correspond country code.
+            .on("click", (d: any) => console.log(d.properties.ISO_A3));   
 
         // Draw graticule.
-        this.selection.select("g#Graticule")
-                        .selectAll("path.graticule")
-                        .data(graticule.lines())
-                        .attr("d", this.path)
-                        .enter()
-                        .append("path")
-                        .attr("class", "graticule")
-                        .attr("d", this.path);
+        d3.select("g#Graticule")
+            .selectAll("path.graticule")
+            .data(graticule.lines())
+            .attr("d", this.path)
+            .enter()
+            .append("path")
+            .attr("class", "graticule")
+            .attr("d", this.path);
     }
 
     private rotate(direction: WorldAtlasView.Rotation): void {

@@ -21,6 +21,11 @@
             stroke-width: .5px;
             stroke-opacity: .5;
         }
+        .line {
+            fill: none;
+            stroke: #ffabff;
+            stroke-width: 3;
+        }
     </style>
 </head>
 
@@ -42,7 +47,14 @@
             <input id="ZoomIn" type="button" value="Zoom In" />
             <input id="ZoomOut" type="button" value="Zoom Out" />
         </div>
-        <div class="LineChart"></div>
+        <div class="TrendCharts">
+            <svg id="Trend" width="1280" height="650">
+                <rect width="1280" height="650" fill="#f0f0f0"></rect>
+                <g id="Line"></g>
+                <g id="xScale"></g>
+                <g id="yScale"></g>
+            </svg>
+        </div>
     </div>
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script type="module" src="./scripts/main.js"></script>

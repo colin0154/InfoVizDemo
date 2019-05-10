@@ -1,16 +1,11 @@
-import { FeatureCollection } from "geojson";
-import * as d3 from "d3";
+import { DataManager } from "../Model/DataManager";
 
 export abstract class View {
-    // Container for d3 selector.
-    protected selection: any;
-
     // Data used to render d3 graphic.
-    protected data: FeatureCollection;
+    protected readonly dataManager: any;
 
-    constructor(container: string, dataSet: FeatureCollection){
-        this.selection = d3.select(container);
-        this.data = dataSet;
+    constructor(){
+        this.dataManager = DataManager.Instance;
     }
     
     protected abstract render(): void;

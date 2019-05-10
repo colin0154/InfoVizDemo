@@ -2,10 +2,24 @@ import { FeatureCollection } from "geojson";
 import { namespace, formatDefaultLocale } from "d3";
 
 export class DataManager {
-    //#region Singleton
+    //#region Property
     private static instance: DataManager;
 
-    private constructor(){}
+    private geoJson: FeatureCollection;
+    private dataset: Map<string, any>;
+
+    // Global States
+    private selectedYear: number;
+    private selectedCountry: string;
+    private selectedField: DataManager.Field;
+    //#endregion
+
+    //#region Singleton
+    private constructor(){
+        this.selectedYear = 2016;
+        this.selectedCountry = "CHN";
+        this.selectedField = DataManager.Field.Mean;
+    }
 
     public static get Instance(): DataManager {
         if (!DataManager.instance) {
@@ -15,31 +29,22 @@ export class DataManager {
     }
     //#endregion
 
-    //#region DataSets
-    private worldGeoPath: FeatureCollection;
-    private dataset: Map<string, any>;
-
+    //#region Dataset
     public setData(data: Array<any>): void {
-        if (this.worldGeoPath != null || this.dataset != null) {
+        if (this.geoJson != null || this.dataset != null) {
             console.log("Warning: Data has already been set.");
             return;
         }
 
-        this.worldGeoPath = data[0];
+        this.geoJson = data[0];
         // Reverse from Array to Map.
         this.dataset = new Map(data[1]);
     }
     //#endregion
 
-    //#region Global States
-    private selectedYear: number = 2016;
-    private selectedCountry: string = "CHN";
-    private selectedField: DataManager.Field = DataManager.Field.Mean;
-    //#endregion
-
-    //#region Data Accessors
-    public get WorldGeoPath(): FeatureCollection {
-        return this.worldGeoPath;
+    //#region Data Accessor
+    public get GeoJson(): FeatureCollection {
+        return this.geoJson;
     }
     
     public GetBMI(): any {
@@ -60,7 +65,7 @@ export class DataManager {
 
     // Return all countries's BMI data in selected year.
     public getBMIAllCountry(): Array<number> {
-        throw "I don't think this method is a good idea.";
+        // throw "I don't think this method is a good idea.";
         
         const field: string = this.getSelectedField();
         const year: number = this.selectedYear - 1975;
@@ -78,9 +83,7 @@ export class DataManager {
     }
     //#endregion
 
-    //#region BMI data accessors helper funciton
-    // Return the correspond data set(female or male).
-
+    //#region Helper Function
     // Return the property name.
     private getSelectedField(): string {
         switch (this.selectedField) {

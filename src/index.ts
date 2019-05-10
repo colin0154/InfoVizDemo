@@ -1,5 +1,6 @@
 import { DataManager } from "./Model/DataManager";
 import { WorldAtlasView } from "./View/WorldAtlasView";
+import { TrendChart } from "./View/TrendChart";
 // import { FeatureCollection } from "geojson";
 
 // Fetch all data sets.
@@ -17,8 +18,8 @@ const dataManager = DataManager.Instance;
 function Initialize(response: Array<object>)
 {
     dataManager.setData(response);
-    console.log(dataManager.GetBMI());
     
     // Require <svg id="WorldAtlas"></svg> in index.html.
-    let worldAtlasView = new WorldAtlasView("svg#WorldAtlas", dataManager.WorldGeoPath); 
+    let worldAtlasView = new WorldAtlasView(); 
+    let trendChart = new TrendChart();
 }
