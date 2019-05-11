@@ -47,36 +47,39 @@ export class DataManager {
         return this.geoJson;
     }
     
-    public GetBMI(): any {
-        const country: any = this.dataset.get(this.selectedCountry);
-        const field: string = this.getSelectedField();
+    public GetField(code: string = this.selectedCountry): number {
+        const country: any = this.dataset.get(code);
         const year: number = this.selectedYear - 1975;
-
+        const field: string = this.getSelectedField();
+        
         return country[field][year];
     }
 
-    // Return the country's all BMI data since 1975.
-    public GetBMIAllYear(): Array<number> {
+    // Return the country's all data from current field since 1975.
+    public GetFieldAllYear(): Array<number> {
         const country: any = this.dataset.get(this.selectedCountry);
         const field: string = this.getSelectedField();
 
         return country[field];
     }
 
-    // Return all countries's BMI data in selected year.
-    // public getBMIAllCountry(): Array<number> {
-    //     // throw "I don't think this method is a good idea.";
-        
-    //     const field: string = this.getSelectedField();
-    //     const year: number = this.selectedYear - 1975;
-    //     const output: Array<number> = [];
+    public GetPopulation(code: string = this.selectedCountry): number{
+        const country: any = this.dataset.get(code);
+        const year: number = this.selectedYear - 1975;
 
-    //     this.dataset.forEach(element => {
-    //         output.push(element[field][year]);
-    //     })
+        return country["Population"][year];
+    }
 
-    //     return output;
-    // }
+    public GetGDPPerCapita(code: string = this.selectedCountry) {
+        const country: any = this.dataset.get(code);
+        const year: number = this.selectedYear - 1990;
+
+        return country["GDPPerCapita"][year];
+    }
+
+    public GetCountryList(): any {
+        return this.dataset.keys();
+    }
 
     public GetCountryName(code: string = this.selectedCountry): string {
         return this.dataset.get(code)["Name"];

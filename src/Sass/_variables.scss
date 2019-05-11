@@ -1,0 +1,12 @@
+$primary-color: #FFAD43;
+$background-color: #F9F7F4;
+$background-white: #ffffff;
+$shadow-color: rgba(#CF9953, 0.2);
+
+@mixin RoundedCorner() {
+    border-radius: 8px;
+}
+
+@mixin BoxShadow() {
+    box-shadow: 0px 0px 20px $shadow-color;
+}

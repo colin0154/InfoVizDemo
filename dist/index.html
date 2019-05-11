@@ -14,46 +14,66 @@
                         header
                 </div>
                 <div class="nav">
-                    nav
+                    <button id="showBMI" type="button"><p>全球BMI概览</p></button>
+                    <button id="showGDP" type="button"><p>全球BMI与人均GDP的关系</p></button>
                 </div>
         </div>
         <div class="main">
-            <div class="field">
-                subnav
+            <div class="field section">
+                <button type="button">BMI均值</button>
+                <button type="button">体重过低</button>
+                <button type="button">肥胖</button>
+                <button type="button">过度肥胖</button>
+                <button type="button">病态肥胖</button>
             </div>
             <div id="BMI" class="content">
-                <div class="info">BMI</div>
-                <div class="charts">
-                    Charts
-                    <!-- <div class="column WorldMap">
-                        <svg id="WorldAtlas" width="1280" height="650" viewBox="0 0 656 450">
-                            <rect width="1280" height="650" fill="#f0f0f0"></rect>
+                <div class="info">
+                    <div class="info-upper section">小人与国家选择</div>
+                    <div class="info-lower section"></div>
+                </div>
+                <div class="charts section">
+                    <div class="WorldMap">
+                        <svg id="WorldAtlas" width="656" height="450" viewBox="0 0 656 450">
+                            <rect width="656" height="450" fill="#F2F2F2"></rect>
+                            <circle id="Ocean" cx="328" cy="225" r="50" fill="lightgrey"></circle>
                             <g id="Maps"></g>
-                            <g id="Graticule"></g>
+                            <!-- <g id="Graticule"></g> -->
                         </svg>
-                        <input id="RotateLeft" type="button" value="Left" />
-                        <input id="RotateRight" type="button" value="Right" />
-                        <input id="RotateUp" type="button" value="Up" />
-                        <input id="RotateDown" type="button" value="Down" />
-                        <input id="ZoomIn" type="button" value="Zoom In" />
-                        <input id="ZoomOut" type="button" value="Zoom Out" />
+                        <div class="buttons">
+                            <button type="button" id="RotateLeft">Left</button>
+                            <button type="button" id="RotateRight">Right</button>
+                            <button type="button" id="RotateUp">Up</button>
+                            <button type="button" id="RotateDown">Down</button>
+                            <button type="button" id="ZoomIn">Zoom In</button>
+                            <button type="button" id="ZoomOut">Zoom Out</button>
+                        </div>
                     </div>
                     <div class="TrendCharts">
-                        <svg id="Trend" width="1280" height="650">
-                            <rect width="1280" height="650" fill="#f0f0f0"></rect>
-                            <g id="Line">
-                                <path class="line"></path>
+                        <div class="slider-wrapper">
+                            <input type="range" min="1975" max="2016" name="Year" id="Year">
+                        </div>
+                        <svg id="Trend" width="656" height="254">
+                            <rect width="656" height="254" fill="#f0f0f0"></rect>
+                            <g class="Line">
+                                <path></path>
                             </g>
-                            <g id="xScale"></g>
-                            <g id="yScale"></g>
+                            <g class="xAxis"></g>
+                            <g class="yAxis"></g>
                         </svg>
-                    </div> -->
+                    </div>
                 </div>
             </div>
-            <div id="GDP" class="content" display="none"></div>
+            <div id="GDP" class="content">
+                <svg id="GDP" width="976px" height="728px" viewBox="0 0 976 728">
+                    <rect width="976" height="728" fill="#F2F2F2"></rect>
+                    <g class="Bubble"></g>
+                    <g class="xAxis"></g>
+                    <g class="yAxis"></g>
+                </svg>
+            </div>
         </div>
     </div>
-
+    <div id="tooltip"></div>
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script type="module" src="./scripts/main.js"></script>
 </body>

@@ -4,6 +4,8 @@ require("./Sass/style.scss");
 import { DataManager } from "./Model/DataManager";
 import { WorldAtlasView } from "./View/WorldAtlasView";
 import { TrendChart } from "./View/TrendChart";
+import { Controller } from "./Controller/Controller";
+import { BubbleChart } from "./View/BubbleChart";
 
 
 // Fetch all data sets.
@@ -21,8 +23,11 @@ const dataManager = DataManager.Instance;
 function Initialize(response: Array<object>)
 {
     dataManager.setData(response);
-    
+
     // Require <svg id="WorldAtlas"></svg> in index.html.
-    // let worldAtlasView = new WorldAtlasView(); 
-    // let trendChart = new TrendChart();
+    let worldAtlasView = new WorldAtlasView(); 
+    let trendChart = new TrendChart();
+    let controller = new Controller();
+
+    let bubbleChart = new BubbleChart();
 }

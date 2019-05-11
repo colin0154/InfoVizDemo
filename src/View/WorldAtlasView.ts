@@ -1,7 +1,7 @@
 import { View } from "./View";
 import * as d3 from "d3";
 import { FeatureCollection } from "geojson";
-import { GeoPath, GeoProjection, geoPath, select } from "d3";
+import { GeoPath, GeoProjection, geoPath, select, scaleDiverging } from "d3";
 import { DataManager } from "../Model/DataManager";
 
 export class WorldAtlasView extends View {
@@ -10,7 +10,6 @@ export class WorldAtlasView extends View {
     private readonly geoJson: FeatureCollection;
     private path: GeoPath;
     private projection: GeoProjection;
-    private container: any;
 
     // Projection rotation and zoom controller.
     private readonly btnRotateLeft: HTMLElement;
@@ -25,6 +24,9 @@ export class WorldAtlasView extends View {
     private rotationPitch: number;
     private rotationRoll: number;
     private zoom: number;
+
+    // Tooltips
+    private div: any;
     //#endregion
 
     public constructor(){
@@ -35,7 +37,7 @@ export class WorldAtlasView extends View {
         this.rotationYaw = 0;
         this.rotationPitch = 0;
         this.rotationRoll = 0;
-        this.zoom = 250;
+        this.zoom = 200;
 
         // Get DOM button references.
         this.btnRotateLeft = document.getElementById("RotateLeft");
@@ -58,11 +60,11 @@ export class WorldAtlasView extends View {
 
     protected render(): void {
         // using Orthographic Projection.
-        this.projection = d3.geoOrthographic().translate([640, 360]).rotate([this.rotationYaw, this.rotationPitch, this.rotationRoll]).scale(this.zoom);
+        this.projection = d3.geoOrthographic().translate([656/2, 450/2]).rotate([this.rotationYaw, this.rotationPitch, this.rotationRoll]).scale(this.zoom);
         this.path = d3.geoPath().projection(this.projection);
 
         // Graticule definition.
-        const graticule = d3.geoGraticule().step([30, 30]);
+        // const graticule = d3.geoGraticule().step([30, 30]);
         
         // Erase existing map.
         // this._selection.selectAll("path").remove();
@@ -77,17 +79,34 @@ export class WorldAtlasView extends View {
             .attr("class", "country")
             .attr("d", this.path)
             // On mouse click, it will emit an event with correspond country code.
-            .on("click", (d: any) => console.log(d.properties.ISO_A3));   
+            .on("click", (d: any) => console.log(d.properties.ISO_A3))
+            .on("mouseover", d => {
+                d3.select("div#tooltip").transition()
+                    .duration(200)
+                    .style("opacity", .9);
+                d3.select("div#tooltip").html(d.properties.ISO_A3)
+                    .style("left", (d3.event.pageX - 30) + "px")
+                    .style("top", (d3.event.pageY - 40) + "px");
+            })
+            .on("mouseout", d => {
+                d3.select("div#tooltip").transition()
+                    .duration(500)
+                    .style("opacity", 0)
+            });
 
         // Draw graticule.
-        d3.select("g#Graticule")
-            .selectAll("path.graticule")
-            .data(graticule.lines())
-            .attr("d", this.path)
-            .enter()
-            .append("path")
-            .attr("class", "graticule")
-            .attr("d", this.path);
+        // d3.select("g#Graticule")
+        //     .selectAll("path.graticule")
+        //     .data(graticule.lines())
+        //     .attr("d", this.path)
+        //     .enter()
+        //     .append("path")
+        //     .attr("class", "graticule")
+        //     .attr("d", this.path);
+
+        // Update the size of Ocean
+        d3.select("circle#Ocean")
+            .attr("r", this.zoom);
     }
 
     private rotate(direction: WorldAtlasView.Rotation): void {
@@ -112,10 +131,10 @@ export class WorldAtlasView extends View {
                 this.rotationPitch -= this.rotationPitch <= -60 ? 0 : finalRotationPitch;
                 break;
             case WorldAtlasView.Rotation.ZoomIn:
-                this.zoom += this.zoom >= 700 ? 0 : 25;
+                this.zoom += this.zoom >= 500 ? 0 : 25;
                 break;
             case WorldAtlasView.Rotation.ZoomOut:
-                this.zoom -= this.zoom <= 150 ? 0 : 25;
+                this.zoom -= this.zoom <= 200 ? 0 : 25;
                 break;
             default:
                 return;
