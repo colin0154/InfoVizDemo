@@ -64,19 +64,19 @@ export class DataManager {
     }
 
     // Return all countries's BMI data in selected year.
-    public getBMIAllCountry(): Array<number> {
-        // throw "I don't think this method is a good idea.";
+    // public getBMIAllCountry(): Array<number> {
+    //     // throw "I don't think this method is a good idea.";
         
-        const field: string = this.getSelectedField();
-        const year: number = this.selectedYear - 1975;
-        const output: Array<number> = [];
+    //     const field: string = this.getSelectedField();
+    //     const year: number = this.selectedYear - 1975;
+    //     const output: Array<number> = [];
 
-        this.dataset.forEach(element => {
-            output.push(element[field][year]);
-        })
+    //     this.dataset.forEach(element => {
+    //         output.push(element[field][year]);
+    //     })
 
-        return output;
-    }
+    //     return output;
+    // }
 
     public GetCountryName(code: string = this.selectedCountry): string {
         return this.dataset.get(code)["Name"];

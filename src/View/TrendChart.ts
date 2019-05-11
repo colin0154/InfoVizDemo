@@ -10,7 +10,7 @@ export class TrendChart extends View {
     private xScale: ScaleLinear<number, number>;
     private yScale: ScaleLinear<number, number>;
 
-    private inputArray: Array<number>;
+    private BMIArray: Array<any> = [];
     //#endregion
 
     public constructor() {
@@ -28,17 +28,17 @@ export class TrendChart extends View {
     }
     
     protected render(): void {
-        this.inputArray = this.dataManager.GetBMIAllYear();
+        // Convert data structure to a format that d3.line() accepts.
+        const inputArray = this.dataManager.GetBMIAllYear();
 
-        let outputArray: Array<any> = [];
-
-        for (let i = 0; i < this.inputArray.length; i++) {
-            outputArray[i] = [i+1975, this.inputArray[i]];
+        for (let i = 0; i < inputArray.length; i++) {
+            this.BMIArray[i] = [i+1975, inputArray[i]];
         }
 
         // Set the input range to the min/max BMI of the country. Thanks to ES6 spread syntax.
-        this.yScale.domain([Math.min(...this.inputArray)-1, Math.max(...this.inputArray)+1]);
+        this.yScale.domain([Math.min(...inputArray) - 0.5, Math.max(...inputArray) + 0.5]);
 
+        // Draw X any Y axis
         d3.select("g#xScale")
             .attr("transform", "translate(0,600)")
             .call(d3.axisBottom(this.xScale));
@@ -47,20 +47,19 @@ export class TrendChart extends View {
             .attr("transform", "translate(20, 0)")
             .call(d3.axisLeft(this.yScale));
 
+        // Draw Line and Dot
         let line: any = d3.line()
             .x(d => this.xScale(d[0]))
             .y(d => this.yScale(d[1]));
 
-        // I have no idea why it has to be [outputArray]. Ask d3.js
-        d3.select("g#Line")
-            .append("path")
-            .data([outputArray])
-            .attr("class", "line")
+        d3.select("g#Line > path.line")
+            .datum(this.BMIArray)
             .attr("d", line);
         
         d3.select("g#Line")
             .selectAll(".circle")
-            .data(outputArray)
+            .data(this.BMIArray)
+            .attr("cy", d => this.yScale(d[1]))
             .enter()
             .append("circle")
             .attr("class", "circle")

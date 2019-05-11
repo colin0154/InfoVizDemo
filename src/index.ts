@@ -1,7 +1,10 @@
+// Stylesheet embedded in JavaScript, will be injected in run-time.
+require("./Sass/style.scss");
+
 import { DataManager } from "./Model/DataManager";
 import { WorldAtlasView } from "./View/WorldAtlasView";
 import { TrendChart } from "./View/TrendChart";
-// import { FeatureCollection } from "geojson";
+
 
 // Fetch all data sets.
 const urls: string[] = [
@@ -20,6 +23,6 @@ function Initialize(response: Array<object>)
     dataManager.setData(response);
     
     // Require <svg id="WorldAtlas"></svg> in index.html.
-    let worldAtlasView = new WorldAtlasView(); 
-    let trendChart = new TrendChart();
+    // let worldAtlasView = new WorldAtlasView(); 
+    // let trendChart = new TrendChart();
 }
