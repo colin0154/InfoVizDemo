@@ -14,7 +14,6 @@ export class DataManager {
     private selectedField: DataManager.Field;
     //#endregion
 
-    //#region Singleton
     private constructor(){
         this.selectedYear = 2016;
         this.selectedCountry = "CHN";
@@ -25,12 +24,11 @@ export class DataManager {
         if (!DataManager.instance) {
             DataManager.instance = new DataManager();
         }
+
         return DataManager.instance;
     }
-    //#endregion
 
-    //#region Dataset
-    public setData(data: Array<any>): void {
+    public Initialize(data: Array<any>): void {
         if (this.geoJson != null || this.dataset != null) {
             console.log("Warning: Data has already been set.");
             return;
@@ -40,7 +38,6 @@ export class DataManager {
         // Reverse from Array to Map.
         this.dataset = new Map(data[1]);
     }
-    //#endregion
 
     //#region Data Accessor
     public get GeoJson(): FeatureCollection {

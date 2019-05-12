@@ -18,11 +18,11 @@ Promise.all( urls.map( u => fetch(u) )).then(res =>
     Promise.all( res.map( res => res.json() )).then( res => Initialize(res) ));
 
 // Initialize the demo after datasets have been loaded.
-const dataManager = DataManager.Instance;
+let dataManager = DataManager.Instance;
 
 function Initialize(response: Array<object>)
 {
-    dataManager.setData(response);
+    dataManager.Initialize(response);
 
     // Require <svg id="WorldAtlas"></svg> in index.html.
     let worldAtlasView = new WorldAtlasView(); 

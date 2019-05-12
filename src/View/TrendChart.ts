@@ -9,8 +9,6 @@ export class TrendChart extends View {
 
     private xAxis: ScaleLinear<number, number>;
     private yAxis: ScaleLinear<number, number>;
-
-    private BMIArray: Array<any> = [];
     //#endregion
 
     public constructor() {
@@ -26,15 +24,12 @@ export class TrendChart extends View {
     }
     
     protected render(): void {
-        // Convert data structure to a format that d3.line() accepts.
-        const inputArray = this.dataManager.GetFieldAllYear();
+        let data = this.prepareData();
 
-        for (let i = 0; i < inputArray.length; i++) {
-            this.BMIArray[i] = [i+1975, inputArray[i]];
-        }
-
-        // Set the input range to the min/max BMI of the country. Thanks to ES6 spread syntax.
-        this.yAxis.domain([Math.min(...inputArray) - 0.5, Math.max(...inputArray) + 0.5]);
+        // Line Generator
+        let line: any = d3.line()
+            .x(d => this.xAxis(d[0]))
+            .y(d => this.yAxis(d[1]));
 
         // Draw X any Y axis
         d3.select("svg#Trend > g.xAxis")
@@ -44,19 +39,16 @@ export class TrendChart extends View {
         d3.select("svg#Trend > g.yAxis")
             .attr("transform", "translate(30, 0)")
             .call(d3.axisLeft(this.yAxis));
-
+        
         // Draw Line and Dot
-        let line: any = d3.line()
-            .x(d => this.xAxis(d[0]))
-            .y(d => this.yAxis(d[1]));
 
         d3.select("svg#Trend > g.Line > path")
-            .datum(this.BMIArray)
+            .datum(data)
             .attr("d", line);
         
         d3.select("svg#Trend > g.Line")
             .selectAll(".circle")
-            .data(this.BMIArray)
+            .data(data)
             .attr("cy", d => this.yAxis(d[1]))
             .enter()
             .append("circle")
@@ -65,19 +57,26 @@ export class TrendChart extends View {
                 .attr("r", 5)
                 .attr("cx", d => this.xAxis(d[0]))
                 .attr("cy", d => this.yAxis(d[1]))
-                .on("mouseover", d => {
-                    d3.select("div#tooltip").transition()
-                        .duration(200)
-                        .style("opacity", .9);
-                    d3.select("div#tooltip").html(d[0])
-                        .style("left", (d3.event.pageX - 30) + "px")
-                        .style("top", (d3.event.pageY - 40) + "px");
-                })
-                .on("mouseout", d => {
-                    d3.select("div#tooltip").transition()
-                        .duration(500)
-                        .style("opacity", 0)
-                });
+                .on("mouseover", d => this.mouseOver(d))
+                .on("mouseout", d => this.mouseOut());
         }
     
+    protected prepareData(): Array<any> {
+        // Convert data structure to a format that d3.line() accepts.
+        let inputArray = this.dataManager.GetFieldAllYear();
+        let outputArray = [];
+
+        for (let i = 0; i < inputArray.length; i++) {
+            outputArray[i] = [i+1975, inputArray[i]];
+        }
+
+        // Set the input range to the min/max BMI of the country. Thanks to ES6 spread syntax.
+        this.yAxis.domain([Math.min(...inputArray) - 0.5, Math.max(...inputArray) + 0.5]);
+
+        return outputArray;
+    }
+
+    protected mouseOverContent(data: any): string {
+        return data[0];
+    }
 }

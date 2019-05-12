@@ -14,3 +14,4 @@ export class Controller {
             document.getElementById("GDP").style.display = isToGPD ? "inline-flex" : "none";
     }
 }
+

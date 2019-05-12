@@ -6,8 +6,6 @@ import { DataManager } from "../Model/DataManager";
 
 export class WorldAtlasView extends View {
     //#region Properties
-    // _selection inherited from View class.
-    private readonly geoJson: FeatureCollection;
     private path: GeoPath;
     private projection: GeoProjection;
 
@@ -25,14 +23,11 @@ export class WorldAtlasView extends View {
     private rotationRoll: number;
     private zoom: number;
 
-    // Tooltips
-    private div: any;
     //#endregion
 
     public constructor(){
         // Hard code selector and data set.
         super();
-        this.geoJson = this.dataManager.GeoJson;
 
         this.rotationYaw = 0;
         this.rotationPitch = 0;
@@ -63,16 +58,12 @@ export class WorldAtlasView extends View {
         this.projection = d3.geoOrthographic().translate([656/2, 450/2]).rotate([this.rotationYaw, this.rotationPitch, this.rotationRoll]).scale(this.zoom);
         this.path = d3.geoPath().projection(this.projection);
 
-        // Graticule definition.
-        // const graticule = d3.geoGraticule().step([30, 30]);
-        
-        // Erase existing map.
-        // this._selection.selectAll("path").remove();
+        let data = this.prepareData().features;
 
         // And draw new one.
         d3.select("g#Maps")
             .selectAll("path.country")
-            .data(this.geoJson.features)
+            .data(data)
             .attr("d", this.path)
             .enter()
             .append("path")
@@ -80,33 +71,16 @@ export class WorldAtlasView extends View {
             .attr("d", this.path)
             // On mouse click, it will emit an event with correspond country code.
             .on("click", (d: any) => console.log(d.properties.ISO_A3))
-            .on("mouseover", d => {
-                d3.select("div#tooltip").transition()
-                    .duration(200)
-                    .style("opacity", .9);
-                d3.select("div#tooltip").html(d.properties.ISO_A3)
-                    .style("left", (d3.event.pageX - 30) + "px")
-                    .style("top", (d3.event.pageY - 40) + "px");
-            })
-            .on("mouseout", d => {
-                d3.select("div#tooltip").transition()
-                    .duration(500)
-                    .style("opacity", 0)
-            });
-
-        // Draw graticule.
-        // d3.select("g#Graticule")
-        //     .selectAll("path.graticule")
-        //     .data(graticule.lines())
-        //     .attr("d", this.path)
-        //     .enter()
-        //     .append("path")
-        //     .attr("class", "graticule")
-        //     .attr("d", this.path);
+            .on("mouseover", d => this.mouseOver(d))
+            .on("mouseout", d => this.mouseOut());
 
         // Update the size of Ocean
         d3.select("circle#Ocean")
             .attr("r", this.zoom);
+    }
+
+    protected prepareData(): any {
+        return this.dataManager.GeoJson;
     }
 
     private rotate(direction: WorldAtlasView.Rotation): void {
@@ -141,6 +115,10 @@ export class WorldAtlasView extends View {
         }
         
         this.render();
+    }
+
+    protected mouseOverContent(data: any): string {
+        return data["properties"]["ISO_A3"];
     }
 }
 
