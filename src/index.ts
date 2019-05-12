@@ -23,11 +23,12 @@ let dataManager = DataManager.Instance;
 function Initialize(response: Array<object>)
 {
     dataManager.Initialize(response);
+    let controller = new Controller();
 
     // Require <svg id="WorldAtlas"></svg> in index.html.
     let worldAtlasView = new WorldAtlasView(); 
     let trendChart = new TrendChart();
-    let controller = new Controller();
-
     let bubbleChart = new BubbleChart();
+
+    dataManager.ChangeYear(2001);
 }

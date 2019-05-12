@@ -9,14 +9,6 @@ export class WorldAtlasView extends View {
     private path: GeoPath;
     private projection: GeoProjection;
 
-    // Projection rotation and zoom controller.
-    private readonly btnRotateLeft: HTMLElement;
-    private readonly btnRotateRight: HTMLElement;
-    private readonly btnRotateUp: HTMLElement;
-    private readonly btnRotateDown: HTMLElement;
-    private readonly btnZoomIn: HTMLElement;
-    private readonly btnZoomOut: HTMLElement;
-
     // Euler angles for projection rotation, zoom for scale.
     private rotationYaw: number;
     private rotationPitch: number;
@@ -26,31 +18,25 @@ export class WorldAtlasView extends View {
     //#endregion
 
     public constructor(){
-        // Hard code selector and data set.
         super();
 
         this.rotationYaw = 0;
         this.rotationPitch = 0;
         this.rotationRoll = 0;
-        this.zoom = 200;
+        this.zoom = 200;     
+    }
 
-        // Get DOM button references.
-        this.btnRotateLeft = document.getElementById("RotateLeft");
-        this.btnRotateRight = document.getElementById("RotateRight");
-        this.btnRotateUp = document.getElementById("RotateUp");
-        this.btnRotateDown = document.getElementById("RotateDown");
-        this.btnZoomIn = document.getElementById("ZoomIn");
-        this.btnZoomOut = document.getElementById("ZoomOut");
-        
-        // Add listener to buttons controlling the rotation.
-        this.btnRotateLeft.onclick = () => { this.rotate(WorldAtlasView.Rotation.Left) };
-        this.btnRotateRight.onclick = () => { this.rotate(WorldAtlasView.Rotation.Right) };
-        this.btnRotateUp.onclick = () => { this.rotate(WorldAtlasView.Rotation.Up) };
-        this.btnRotateDown.onclick = () => { this.rotate(WorldAtlasView.Rotation.Down) };
-        this.btnZoomIn.onclick = () => { this.rotate(WorldAtlasView.Rotation.ZoomIn) };
-        this.btnZoomOut.onclick = () => { this.rotate(WorldAtlasView.Rotation.ZoomOut) };
-        
-        this.render();
+    protected addListener(): void {
+        let eventTarget = document.getElementById("EventTarget");
+        eventTarget.addEventListener("StateChanged", e => this.render());
+
+        // Rotation Control
+        document.getElementById("RotateLeft").onclick = () => { this.rotate(WorldAtlasView.Rotation.Left) };
+        document.getElementById("RotateRight").onclick = () => { this.rotate(WorldAtlasView.Rotation.Right) };
+        document.getElementById("RotateUp").onclick = () => { this.rotate(WorldAtlasView.Rotation.Up) };
+        document.getElementById("RotateDown").onclick = () => { this.rotate(WorldAtlasView.Rotation.Down) };
+        document.getElementById("ZoomIn").onclick = () => { this.rotate(WorldAtlasView.Rotation.ZoomIn) };
+        document.getElementById("ZoomOut").onclick = () => { this.rotate(WorldAtlasView.Rotation.ZoomOut) };
     }
 
     protected render(): void {

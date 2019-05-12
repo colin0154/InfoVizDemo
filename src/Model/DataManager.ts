@@ -1,5 +1,4 @@
 import { FeatureCollection } from "geojson";
-import { namespace, formatDefaultLocale } from "d3";
 
 export class DataManager {
     //#region Property
@@ -12,12 +11,18 @@ export class DataManager {
     private selectedYear: number;
     private selectedCountry: string;
     private selectedField: DataManager.Field;
+
+    private readonly event: Event;
+    private readonly EventTarget: HTMLElement;
     //#endregion
 
     private constructor(){
         this.selectedYear = 2016;
         this.selectedCountry = "CHN";
         this.selectedField = DataManager.Field.Mean;
+
+        this.event = new Event("StateChanged")
+        this.EventTarget = document.getElementById("EventTarget");
     }
 
     public static get Instance(): DataManager {
@@ -42,6 +47,14 @@ export class DataManager {
     //#region Data Accessor
     public get GeoJson(): FeatureCollection {
         return this.geoJson;
+    }
+
+    public get SelectedCountry(): string {
+        return this.SelectedCountry;
+    }
+
+    public get SelectedYear(): number {
+        return this.selectedYear;
     }
     
     public GetField(code: string = this.selectedCountry): number {
@@ -83,6 +96,33 @@ export class DataManager {
     }
     //#endregion
 
+    //#region State Setter
+    public ChangeYear(year: number): void {
+        if (year < 1975 || year > 2016) {
+            console.log("Warning: DataManager don't have year " + year);
+            return;
+        }
+
+        this.selectedYear = year;
+        this.EventTarget.dispatchEvent(this.event);
+    }
+
+    public ChangeField(field: DataManager.Field): void {
+        this.selectedField = field;
+        this.EventTarget.dispatchEvent(this.event);
+    }
+
+    public ChangeCountry(code: string): void {
+        if (!this.GetCountryName(code)) {
+            console.log("Warning: Invalid country code.")
+            return;
+        }
+
+        this.selectedCountry = code;
+        this.EventTarget.dispatchEvent(this.event);
+    }
+    //#endregion
+
     //#region Helper Function
     // Return the property name.
     private getSelectedField(): string {
@@ -90,8 +130,8 @@ export class DataManager {
             case DataManager.Field.Mean:
                 return "Mean";
                 break;
-            case DataManager.Field.UnderWeight:
-                return "UnderWeight";
+            case DataManager.Field.Underweight:
+                return "Underweight";
                 break;
             case DataManager.Field.Obesity:
                 return "Obesity";
@@ -112,7 +152,7 @@ export class DataManager {
 export namespace DataManager {
     export enum Field {
         Mean,
-        UnderWeight,
+        Underweight,
         Obesity,
         Severe,
         Morbid

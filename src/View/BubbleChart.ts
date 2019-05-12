@@ -1,12 +1,13 @@
 import { View } from "./View";
+import { ScaleLinear } from "d3";
 import * as d3 from "d3";
 
 export class BubbleChart extends View {
     private countryList: Array<string>;
 
-    private xAxis: any;
-    private yAxis: any;
-    private zAxis: any;
+    private xAxis: ScaleLinear<number, number>;
+    private yAxis: ScaleLinear<number, number>;
+    private zAxis: ScaleLinear<number, number>;
 
     public constructor() {
         super();
@@ -17,8 +18,11 @@ export class BubbleChart extends View {
         this.xAxis = d3.scaleLinear().range([20, 956]);
         this.yAxis = d3.scaleLinear().range([698, 20]);
         this.zAxis = d3.scaleLinear().range([1, 40]);
+    }
 
-        this.render();
+    protected addListener(): void {
+        let eventTarget = document.getElementById("EventTarget");
+        eventTarget.addEventListener("StateChanged", e => this.render());
     }
 
     protected render(): void {

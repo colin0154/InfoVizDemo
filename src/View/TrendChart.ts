@@ -1,5 +1,5 @@
 import { View } from "./View";
-import { ScaleLinear, svg, xml, select, path } from "d3";
+import { ScaleLinear } from "d3";
 import * as d3 from "d3";
 
 export class TrendChart extends View {
@@ -19,8 +19,11 @@ export class TrendChart extends View {
         
         this.xAxis = d3.scaleLinear().domain([1973, 2020]).range([30, this.width-20]);
         this.yAxis = d3.scaleLinear().range([this.height-20, 20]);
+    }
 
-        this.render();
+    protected addListener(): void {
+        let eventTarget = document.getElementById("EventTarget");
+        eventTarget.addEventListener("StateChanged", e => this.render());
     }
     
     protected render(): void {

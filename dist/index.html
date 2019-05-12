@@ -20,11 +20,11 @@
         </div>
         <div class="main">
             <div class="field section">
-                <button type="button">BMI均值</button>
-                <button type="button">体重过低</button>
-                <button type="button">肥胖</button>
-                <button type="button">过度肥胖</button>
-                <button type="button">病态肥胖</button>
+                <button id="Mean" type="button">BMI均值</button>
+                <button id="Underweight" type="button">体重过低</button>
+                <button id="Obesity" type="button">肥胖</button>
+                <button id="Severe" type="button">过度肥胖</button>
+                <button id="Morbid" type="button">病态肥胖</button>
             </div>
             <div id="BMI" class="content">
                 <div class="info">
@@ -50,7 +50,7 @@
                     </div>
                     <div class="TrendCharts">
                         <div class="slider-wrapper">
-                            <input type="range" min="1975" max="2016" name="Year" id="Year">
+                            <input type="range" min="1975" max="2016" name="Year" step="1" id="Year">
                         </div>
                         <svg id="Trend" width="656" height="254">
                             <rect width="656" height="254" fill="#f0f0f0"></rect>
@@ -74,6 +74,10 @@
         </div>
     </div>
     <div id="tooltip"></div>
+    <div id="EventTarget" style="display:none">
+        This div is used to dispatch event in JavaScript, and is with no visual functionality.
+        Now my lovely JavaScript object can listen on and dispatch through this DOM element.
+    </div>
     <script src="https://d3js.org/d3.v5.min.js"></script>
     <script type="module" src="./scripts/main.js"></script>
 </body>
