@@ -15,9 +15,9 @@ export class BubbleChart extends View {
         // Maybe Map support in TypeScript is not that good?
         this.countryList = Array.from(this.dataManager.GetCountryList());
 
-        this.xAxis = d3.scaleLinear().range([20, 956]);
-        this.yAxis = d3.scaleLinear().range([698, 20]);
-        this.zAxis = d3.scaleLinear().range([1, 40]);
+        this.xAxis = d3.scaleLinear().range([60, 926]);
+        this.yAxis = d3.scaleLinear().range([558, 0]);
+        this.zAxis = d3.scaleLinear().range([3, 40]);
     }
 
     protected addListener(): void {
@@ -29,28 +29,27 @@ export class BubbleChart extends View {
         let data: Array<any> = this.prepareData();
 
         d3.select("svg#GDP > g.xAxis")
-            .attr("transform", "translate(0, 700)")
+            .attr("transform", "translate(0, 558)")
             .call(d3.axisBottom(this.xAxis));
         
         d3.select("svg#GDP > g.yAxis")
-            .attr("transform", "translate(30, 0)")
+            .attr("transform", "translate(60, 0)")
             .call(d3.axisLeft(this.yAxis));
         
+        d3.selectAll(".bubble").remove();
+
         d3.select("svg#GDP > g.Bubble")
             .selectAll(".bubble")
             .data(data)
-            .attr("cx", d => this.xAxis(d["GDPPerCapita"]))
-            .attr("cy", d => this.yAxis(d["Field"]))
-            .attr("r", d => this.zAxis(d["Population"]))
             .enter()
             .append("circle")
             .attr("cx", d => this.xAxis(d["GDPPerCapita"]))
             .attr("cy", d => this.yAxis(d["Field"]))
             .attr("r", d => this.zAxis(d["Population"]))
             .attr("class", "bubble")
-            .attr("country", d => d["Code"])
             .on("mouseover", d => this.mouseOver(d))
-            .on("mouseout", d => this.mouseOut());
+            .on("mouseout", d => this.mouseOut())
+            .exit().remove();
     }
 
     protected prepareData(): Array<any> {
@@ -67,12 +66,13 @@ export class BubbleChart extends View {
         this.countryList.forEach(element => {
             let specificCountryData: any = {};
             specificCountryData["Code"] = element;
-            specificCountryData["Field"] = this.dataManager.GetField(element);
+            specificCountryData["Field"] = this.dataManager.GetFieldValue(element);
             specificCountryData["GDPPerCapita"] = this.dataManager.GetGDPPerCapita(element);
             specificCountryData["Population"] = this.dataManager.GetPopulation(element);
 
             // Some countries don't have data in specific year. Just skip.
             if(specificCountryData["Field"] == null
+                || specificCountryData["GDPPerCapita"] == 0
                 || specificCountryData["GDPPerCapita"] == null
                 || specificCountryData["Population"] == null)
                 return;
@@ -99,7 +99,23 @@ export class BubbleChart extends View {
     }
 
     protected mouseOverContent(data: any): string {
-        return data["Code"];
-    }
+        let html: string =
+        "<p>" + this.dataManager.GetCountryName(data["Code"]) +"</p>"
+        + "<p>GDP：" + data["GDPPerCapita"] + "</p>";
 
+        // Determine using ten thousand or million as unit
+        // Source data is already using thousand as unit, so a million is 1000;
+        const HUNDRED_MILLION:number = 100000;
+        let pop = data["Population"];
+
+        if (data["Population"] > HUNDRED_MILLION) {
+            let aboveHM = Math.floor(data["Population"] / HUNDRED_MILLION);
+            let belowHM = Math.round((pop - aboveHM * HUNDRED_MILLION) / 10);
+            html += "<p>人口：" + aboveHM + "亿" + belowHM + "万</p>"
+        } else {
+            html += "<p>人口：" + Math.round(pop / 10) + "万</p>"
+        }
+
+        return html;
+    }
 }

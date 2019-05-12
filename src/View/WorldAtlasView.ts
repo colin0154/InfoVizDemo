@@ -51,12 +51,21 @@ export class WorldAtlasView extends View {
             .selectAll("path.country")
             .data(data)
             .attr("d", this.path)
+            .attr("class", (d: any) => {
+                if (d.properties.WB_A3 == this.dataManager.SelectedCountry)
+                    return "country active";
+                return "country";
+            })
             .enter()
             .append("path")
-            .attr("class", "country")
+            .attr("class", (d: any) => {
+                if (d.properties.WB_A3 == this.dataManager.SelectedCountry)
+                    return "country active";
+                return "country";
+            })
             .attr("d", this.path)
             // On mouse click, it will emit an event with correspond country code.
-            .on("click", (d: any) => console.log(d.properties.ISO_A3))
+            .on("click", (d: any) => this.changeCountry(d.properties.WB_A3))
             .on("mouseover", d => this.mouseOver(d))
             .on("mouseout", d => this.mouseOut());
 
@@ -104,7 +113,26 @@ export class WorldAtlasView extends View {
     }
 
     protected mouseOverContent(data: any): string {
-        return data["properties"]["ISO_A3"];
+        let countryCode = data["properties"]["WB_A3"];
+        let countryName = this.dataManager.GetCountryName(countryCode);
+
+        if (!countryName) {
+            return "<p>缺少该国家或地区的数据</p>";
+        }
+
+        let fieldName = "患病率: ";
+        if (this.dataManager.SelectedField == DataManager.Field.Mean){
+            fieldName = "BMI均值: ";
+        }
+        
+        let html: string ="<p>" + countryName +"</p> \n"
+        + "<p>" +  fieldName + this.dataManager.GetFieldValue(countryCode) + "</p>";
+        
+        return html;
+    }
+
+    private changeCountry(code: string) {
+        this.dataManager.ChangeCountry(code);
     }
 }
 

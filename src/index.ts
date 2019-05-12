@@ -6,6 +6,7 @@ import { WorldAtlasView } from "./View/WorldAtlasView";
 import { TrendChart } from "./View/TrendChart";
 import { Controller } from "./Controller/Controller";
 import { BubbleChart } from "./View/BubbleChart";
+import { InfoSection } from "./View/InfoSection";
 
 
 // Fetch all data sets.
@@ -29,6 +30,7 @@ function Initialize(response: Array<object>)
     let worldAtlasView = new WorldAtlasView(); 
     let trendChart = new TrendChart();
     let bubbleChart = new BubbleChart();
+    let infoSection = new InfoSection();
 
     dataManager.ChangeYear(2001);
 }

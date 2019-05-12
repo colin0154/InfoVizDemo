@@ -50,14 +50,18 @@ export class DataManager {
     }
 
     public get SelectedCountry(): string {
-        return this.SelectedCountry;
+        return this.selectedCountry;
     }
 
     public get SelectedYear(): number {
         return this.selectedYear;
     }
     
-    public GetField(code: string = this.selectedCountry): number {
+    public get SelectedField(): DataManager.Field {
+        return this.selectedField;
+    }
+    
+    public GetFieldValue(code: string = this.selectedCountry): number {
         const country: any = this.dataset.get(code);
         const year: number = this.selectedYear - 1975;
         const field: string = this.getSelectedField();
@@ -66,7 +70,7 @@ export class DataManager {
     }
 
     // Return the country's all data from current field since 1975.
-    public GetFieldAllYear(): Array<number> {
+    public GetFieldValueAllYear(): Array<number> {
         const country: any = this.dataset.get(this.selectedCountry);
         const field: string = this.getSelectedField();
 
@@ -92,6 +96,10 @@ export class DataManager {
     }
 
     public GetCountryName(code: string = this.selectedCountry): string {
+        if (this.dataset.get(code) == null){
+            return;
+        }
+
         return this.dataset.get(code)["Name"];
     }
     //#endregion

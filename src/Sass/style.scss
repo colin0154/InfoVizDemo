@@ -57,8 +57,40 @@ button {
             margin-right: 20px;
             display:inline-flex;
             flex-direction: column;
-            button {
-                width: 100%;
+
+            .field-upper {
+                height: 50%;
+                display: inline-flex;
+                flex-direction: column;
+                justify-content: space-evenly;
+                button {
+                    padding: 0;
+                    width: 100%;
+                    height: 36px;
+                    border-radius: 0;
+                    color: $primary-color;
+                    background: $background-white;
+                    border: 0;
+                }
+                button.active, button.active:hover {
+                    color: $background-color;
+                    background: $primary-color;
+                }
+                button:focus, button:active {
+                    outline: 0;
+                }
+                button:hover {
+                    cursor: pointer;
+                    color: $background-color;
+                    background: rgba($primary-color, .5);
+                }
+
+            }
+            .field-lower{
+                height: 50%;
+                p {
+                    text-align: center;
+                }
             }
         }
 
@@ -78,10 +110,20 @@ button {
                 .info-upper {
                     height: 520px;
                     margin-bottom: 20px;
+                    .select-wrapper {
+                        width: 70%;
+                        margin: 50px auto 40px auto;
+                    }
                 }
 
                 .info-lower {
                     height: 188px;
+                    display: inline-flex;
+                    flex-direction: column;
+                    justify-content: space-evenly;
+                    p {
+                        text-align: center;
+                    }
                 }
             }
 
@@ -91,20 +133,21 @@ button {
 
             .WorldMap {
                 .country {
-                    fill: #f0e4dd;
+                    fill: #F0E4DD;
                     stroke: #e0cabc;
                     stroke-width: 0.5;
                 }
+
                 .country:hover {
+                    fill: rgba($primary-color, 0.5);
+                    stroke: rgba($primary-color, 0.5);
+                }
+
+                .country.active,
+                .country.active:hover {
                     fill: $primary-color;
-                    stroke: $primary-color;
                 }
-                .graticule {
-                    fill: none;
-                    stroke: #a0a0a0;
-                    stroke-width: .5px;
-                    stroke-opacity: .5;
-                }
+
                 .buttons {
                     position: relative;
                     margin-bottom: -24px;
@@ -116,12 +159,17 @@ button {
             .TrendCharts {
                 .slider-wrapper {
                     display: flex;
-
+                    padding-top: 15px;
+                    padding-bottom: 5px;
                     input {
                         width: 90%;
                         margin: 0 auto;
                     }
+                    input:focus, input:active {
+                        outline: 0;
+                    }
                 }
+
                 svg > g.Line > path {
                     fill: none;
                     stroke: #ffabff;
@@ -132,11 +180,62 @@ button {
 
         #GDP {
             display: none;
+            flex-direction: column;
 
             * {
                 // Otherwise all child elements will have a "display: none" style.
                 display: block;
             }
+
+            .GDP-upper {
+                display: inline-flex;
+                height: 120px;
+
+                .select-wrapper{
+                    width: 30%;
+                    padding: 50px 50px 40px 30px;
+                    }
+                .slider-wrapper-two {
+                    width: 70%;
+                    margin: 0 auto;
+                    padding-top: 55px;
+                    padding-right: 50px;
+                    input {
+                        width: 100%;
+                    }
+                }
+            }
+
+            .GDP-lower{
+                g.Bubble {
+                    .bubble{
+                        fill: #ffffff;
+                        stroke: #797977;
+                        stroke-width: 1;
+                    }
+                }
+            }
+        }
+
+        .slider {
+            -webkit-appearance: none;
+            appearance: none;
+            @include RoundedCorner();
+            background: #F0F0F0;
+            height: 10px;
+            
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            @include RoundedCorner();
+
+            height: 30px;
+            width: 10px;
+            background: $primary-color;
+            cursor: pointer;
+
         }
     }
 
@@ -151,12 +250,26 @@ div#tooltip {
     opacity: 0;
     position: absolute;			
     text-align: center;			
-    width: 60px;					
-    height: 28px;					
+    width: 110px;				
     padding: 2px;				
     font: 12px sans-serif;		
-    background: lightsteelblue;	
+    background: #F0EDE9;	
     border: 0px;		
     border-radius: 8px;			
     pointer-events: none;	
+    p {
+        margin: 0;
+    }
+}
+
+select{
+    width: 100%;
+    border: 0;
+    border-bottom: 1px solid $primary-color;
+    text-align: center;
+    text-align-last: center;
+
+    option {
+        padding-top: 20px;
+    }
 }
