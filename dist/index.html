@@ -9,14 +9,18 @@
 
 <body>
     <div class="flex-container">
+        <div class="welcome" id="welcome" style="background-image: url('./images/background.jpg');">
+            <button id="startDemo" type="button" disabled>加载中...</button>
+            <button id="aboutUs" type="button">关于我们</button>
+        </div>
         <div class="header">
-                <div class="title">
-                        header
-                </div>
-                <div class="nav">
-                    <button id="showBMI" type="button"><p>全球BMI概览</p></button>
-                    <button id="showGDP" type="button"><p>全球BMI与人均GDP的关系</p></button>
-                </div>
+            <div class="title">
+                    <p>标题</p>
+            </div>
+            <div class="nav">
+                <button id="showBMI" type="button" class="active"><p>全球BMI概览</p></button>
+                <button id="showGDP" type="button" class=""><p>全球BMI与人均GDP的关系</p></button>
+            </div>    
         </div>
         <div class="main">
             <div class="field section">

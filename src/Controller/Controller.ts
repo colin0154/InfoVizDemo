@@ -51,23 +51,26 @@ export class Controller {
         // this.yearSliderTwo.oninput = (e) => this.sliderOnInput(e);
     }
 
-    private changePage(isToGPD: boolean): void {
-        if (this.dataManager.SelectedYear < 1990 && isToGPD) {
+    private changePage(isToGDP: boolean): void {
+        if (this.dataManager.SelectedYear < 1990 && isToGDP) {
             this.dataManager.ChangeYear(1990);
         } 
 
         this.yearSliderOne.value = this.dataManager.SelectedYear.toString();
         this.yearSliderTwo.value = this.dataManager.SelectedYear.toString();
 
-        this.sliderOnInput(!isToGPD);
+        this.sliderOnInput(!isToGDP);
 
         // Stop rendering the not visible page.
-        Controller.CurrentPageOnGDP= isToGPD;
+        Controller.CurrentPageOnGDP= isToGDP;
         // Raise event to tell charts to update. Otherwise the charts would still have previous state since last page change.
         document.getElementById("EventTarget").dispatchEvent(new Event("StateChanged"));
 
-        document.getElementById("BMI").style.display = isToGPD ? "none" : "inline-flex";
-        document.getElementById("GDP").style.display = isToGPD ? "inline-flex" : "none";
+        document.getElementById("BMI").style.display = isToGDP ? "none" : "inline-flex";
+        document.getElementById("GDP").style.display = isToGDP ? "inline-flex" : "none";
+
+        document.getElementById("showBMI").setAttribute("class", isToGDP ? "" : "active");
+        document.getElementById("showGDP").setAttribute("class", isToGDP ? "active" : "");
     }
 
     private changeYear(e: Event, isSliderOne: boolean): void {

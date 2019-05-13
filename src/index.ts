@@ -21,6 +21,8 @@ Promise.all( urls.map( u => fetch(u) )).then(res =>
 // Initialize the demo after datasets have been loaded.
 let dataManager = DataManager.Instance;
 
+let startButton: HTMLButtonElement = <HTMLButtonElement>document.getElementById("startDemo");
+
 function Initialize(response: Array<object>)
 {
     dataManager.Initialize(response);
@@ -33,4 +35,8 @@ function Initialize(response: Array<object>)
     let infoSection = new InfoSection();
 
     dataManager.ChangeYear(2016);
+
+    startButton.innerText = "进入主页";
+    startButton.disabled = false;
+    startButton.onclick = () => document.getElementById("welcome").setAttribute("style", "display: none;"); 
 }

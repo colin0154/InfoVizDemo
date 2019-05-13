@@ -13,10 +13,55 @@ button {
     @include RoundedCorner();
 }
 
+.welcome {
+    width: 1366px;
+    height: 768px;
+    position: absolute;
+    z-index: 99;
+
+    button {
+        background: none;
+        color: #ffffff;
+        border: 2px solid #ffffff;
+        font-weight: bold;
+    }
+
+    button:hover {
+        background: #ffffff;
+        color: $primary-color;
+        outline: 0;
+        cursor: pointer;
+    }
+
+    button:disabled {
+        background: none;
+        color: #ffffff;
+        cursor: default;
+    }
+
+    #startDemo {
+        position: absolute;
+        left: 548px;
+        top: 429px;
+        width: 271px;
+        height: 60px;
+    }
+
+    #aboutUs {
+        position: absolute;
+        left: 600px;
+        top: 681px;
+        width: 166px;
+        height: 37px;
+    }
+}
+
 .flex-container {
     display: inline-flex;
     height: 768px;
     margin: 0 auto;
+    background: $background-white;
+    @include RoundedCorner();
 
     .header {
         width: 170px - 40px;
@@ -24,8 +69,15 @@ button {
         display: inline-flex;
 
         .title {
+            display: flex;
             width: 70px;
-            background-color: azure;
+            height: 100%;
+            background-color: $background-white;
+            p{
+                text-align: center;
+                writing-mode: vertical-lr;
+                text-orientation: upright;
+            }
         }
 
         .nav {
@@ -35,13 +87,29 @@ button {
             flex-direction: column;
 
             button {
+                @include BoxShadow();
                 height: 50%;
                 width: 100%;
+                background: $background-white;
+                border: none;
                 p {
                     writing-mode: vertical-lr;
                     text-orientation: upright;
                     margin: auto;
                 }
+            }
+
+            button:hover {
+                background: rgba($primary-color, 0.5);
+                cursor: pointer;
+            }
+
+            button.active {
+                background: $primary-color;
+            }
+            
+            button:focus, button.active:focus {
+                outline: none;
             }
         }
     }
@@ -183,10 +251,21 @@ button {
                     }
                 }
 
-                svg > g.Line > path {
-                    fill: none;
-                    stroke: #ffabff;
-                    stroke-width: 3;
+                svg {
+                    g.Line {
+                        path {
+                            fill: none;
+                            stroke: $primary-color;
+                            stroke-width: 3;
+                        }
+                        .circle {
+                            fill: none;
+                            stroke: none;
+                        }
+                        .circle.active {
+                            fill: $primary-color;
+                        }
+                    } 
                 }
             }
         }

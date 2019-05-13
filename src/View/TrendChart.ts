@@ -37,7 +37,8 @@ export class TrendChart extends View {
         // Line Generator
         let line: any = d3.line()
             .x(d => this.xAxis(d[0]))
-            .y(d => this.yAxis(d[1]));
+            .y(d => this.yAxis(d[1]))
+            .curve(d3.curveMonotoneX);
 
         // Draw X any Y axis
         d3.select("svg#Trend > g.xAxis")
@@ -59,9 +60,18 @@ export class TrendChart extends View {
             .selectAll(".circle")
             .data(data)
             .attr("cy", d => this.yAxis(d[1]))
+            .attr("class", (d: any) => {
+                if (d[0] == this.dataManager.SelectedYear)
+                    return "circle active";
+                return "circle";
+            })
             .enter()
             .append("circle")
-                .attr("class", "circle")
+                .attr("class", (d: any) => {
+                    if (d[0] == this.dataManager.SelectedYear)
+                        return "circle active";
+                    return "circle";
+                })
                 .attr("year", d => d[0])
                 .attr("r", 5)
                 .attr("cx", d => this.xAxis(d[0]))
