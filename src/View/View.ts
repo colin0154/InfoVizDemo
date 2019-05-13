@@ -17,7 +17,7 @@ export abstract class View {
     protected mouseOver(data: any): void {
         d3.select("div#tooltip")
             .style("left", (d3.event.pageX - 30) + "px")
-            .style("top", (d3.event.pageY - 40) + "px")
+            .style("top", (d3.event.pageY - 60) + "px")
                 .transition()
                 .duration(200)
                 .style("opacity", .9);

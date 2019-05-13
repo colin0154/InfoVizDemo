@@ -159,14 +159,26 @@ button {
             .TrendCharts {
                 .slider-wrapper {
                     display: flex;
-                    padding-top: 15px;
+                    padding-top: 40px;
                     padding-bottom: 5px;
-                    input {
-                        width: 90%;
-                        margin: 0 auto;
+                    
+                    .slider-main {
+                        width: 100%;
+                        padding-left: 10px;
+                        input {
+                            width: 87%;
+                            margin: 0 auto;
+                        }
+                        input:focus, input:active {
+                            outline: 0;
+                        }
                     }
-                    input:focus, input:active {
-                        outline: 0;
+
+                    .slider-output {
+                        width: 0;
+                        position: relative;
+                        top: -20px;
+                        margin: 0;
                     }
                 }
 
@@ -196,22 +208,47 @@ button {
                     padding: 50px 50px 40px 30px;
                     }
                 .slider-wrapper-two {
+                    display: flex;
                     width: 70%;
                     margin: 0 auto;
                     padding-top: 55px;
                     padding-right: 50px;
-                    input {
+                    
+                    .slider-main {
+                        display: flex;
                         width: 100%;
+
+                        input {
+                            width: 100%;
+                        }
+                        input:focus, input:active {
+                            outline: 0;
+                        }
                     }
+
+                    .slider-output {
+                        width: 0;
+                        position: relative;
+                        top: -40px;
+                        left: -6%;
+                    }
+
                 }
             }
 
             .GDP-lower{
                 g.Bubble {
                     .bubble{
-                        fill: #ffffff;
+                        fill: none;
                         stroke: #797977;
                         stroke-width: 1;
+                    }
+                    .bubble:hover {
+                        fill: rgba($primary-color, .5);
+                        cursor: pointer;
+                    }
+                    .bubble.active {
+                        fill: $primary-color;
                     }
                 }
             }

@@ -1,6 +1,7 @@
 import { View } from "./View";
 import { ScaleLinear } from "d3";
 import * as d3 from "d3";
+import { DataManager } from "../Model/DataManager";
 
 export class BubbleChart extends View {
     private countryList: Array<string>;
@@ -15,9 +16,9 @@ export class BubbleChart extends View {
         // Maybe Map support in TypeScript is not that good?
         this.countryList = Array.from(this.dataManager.GetCountryList());
 
-        this.xAxis = d3.scaleLinear().range([60, 926]);
+        this.xAxis = d3.scaleLinear().range([60, 926]).domain([0, 55000]).clamp(true);
         this.yAxis = d3.scaleLinear().range([558, 0]);
-        this.zAxis = d3.scaleLinear().range([3, 40]);
+        this.zAxis = d3.scaleLinear().range([3, 40]).domain([0, 1400000]);
     }
 
     protected addListener(): void {
@@ -27,6 +28,7 @@ export class BubbleChart extends View {
 
     protected render(): void {
         let data: Array<any> = this.prepareData();
+        this.setYAxisDomain();
 
         d3.select("svg#GDP > g.xAxis")
             .attr("transform", "translate(0, 558)")
@@ -46,22 +48,18 @@ export class BubbleChart extends View {
             .attr("cx", d => this.xAxis(d["GDPPerCapita"]))
             .attr("cy", d => this.yAxis(d["Field"]))
             .attr("r", d => this.zAxis(d["Population"]))
-            .attr("class", "bubble")
+            .attr("class", (d: any) => {
+                if (d["Code"] == this.dataManager.SelectedCountry)
+                    return "bubble active";
+                return "bubble";
+            })
             .on("mouseover", d => this.mouseOver(d))
             .on("mouseout", d => this.mouseOut())
-            .exit().remove();
+            .on("click", (d: any) => this.dataManager.ChangeCountry(d["Code"]))
     }
 
     protected prepareData(): Array<any> {
         let data: Array<any> = [];
-
-        // Determine the max/min value for axis scale. 
-        // Make sure their value would be replaced.
-        let xmax: number = 0;
-        let ymin: number = 99999;
-        let ymax: number = 0;
-        let zmin: number = 9999999999;
-        let zmax: number = 0;
 
         this.countryList.forEach(element => {
             let specificCountryData: any = {};
@@ -76,26 +74,34 @@ export class BubbleChart extends View {
                 || specificCountryData["GDPPerCapita"] == null
                 || specificCountryData["Population"] == null)
                 return;
-            
-            if (specificCountryData["Field"] < ymin)
-                ymin = specificCountryData["Field"];
-            if (specificCountryData["Field"] > ymax)
-                ymax = specificCountryData["Field"];
-            if (specificCountryData["GDPPerCapita"] > xmax)
-                xmax = specificCountryData["GDPPerCapita"]; 
-            if (specificCountryData["Population"] < zmin)
-                zmin = specificCountryData["Population"];
-                if (specificCountryData["Population"] > zmax)
-                zmax = specificCountryData["Population"];
 
             data.push(specificCountryData);
         });
-
-        this.xAxis.domain([0, xmax]);
-        this.yAxis.domain([ymin, ymax]);
-        this.zAxis.domain([zmin, zmax]);
-
         return data;
+    }
+
+    private setYAxisDomain(): void {
+        let yAixdomain: Array<number>;
+
+        switch (this.dataManager.SelectedField) {
+            case DataManager.Field.Mean:
+                yAixdomain = [19, 31];
+                break;
+            case DataManager.Field.Underweight:
+                yAixdomain = [0, 26];
+                break;
+            case DataManager.Field.Obesity:
+                yAixdomain = [0, 45];
+                break;
+            case DataManager.Field.Severe:
+                yAixdomain = [0, 18];
+                break;
+            case DataManager.Field.Morbid:
+                yAixdomain = [0, 9];
+                break;
+        }
+
+        this.yAxis.domain(yAixdomain).clamp(true);
     }
 
     protected mouseOverContent(data: any): string {

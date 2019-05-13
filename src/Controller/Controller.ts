@@ -20,6 +20,8 @@ export class Controller {
         this.countrySelectOne = <HTMLSelectElement>document.getElementById("selectDropdownOne");
         this.countrySelectTwo = <HTMLSelectElement>document.getElementById("selectDropdownTwo");
 
+        this.previousActiveButton = document.getElementById("Mean");
+
         this.isDropdownInitialized = false;
 
         this.addListener();
@@ -37,10 +39,12 @@ export class Controller {
 
         document.getElementById("EventTarget").addEventListener("StateChanged", e => this.stateChanged());
 
-        this.yearSliderOne.onchange = () => this.changeYear(true);
-        this.yearSliderTwo.onchange = () => this.changeYear(false);
+        this.yearSliderOne.oninput = (e) => this.changeYear(e, true);
+        this.yearSliderTwo.oninput = (e) => this.changeYear(e, false);
         this.countrySelectOne.onchange = (e) => this.changeCountry(e);
         this.countrySelectTwo.onchange = (e) => this.changeCountry(e);
+
+        // this.yearSliderTwo.oninput = (e) => this.sliderOnInput(e);
     }
 
     private changePage(isToGPD: boolean): void {
@@ -51,23 +55,25 @@ export class Controller {
         this.yearSliderOne.value = this.dataManager.SelectedYear.toString();
         this.yearSliderTwo.value = this.dataManager.SelectedYear.toString();
 
+        this.sliderOnInput(!isToGPD);
+
         document.getElementById("BMI").style.display = isToGPD ? "none" : "inline-flex";
         document.getElementById("GDP").style.display = isToGPD ? "inline-flex" : "none";
     }
 
-    private changeYear(isSliderOne: boolean): void {
+    private changeYear(e: Event, isSliderOne: boolean): void {
         if (isSliderOne) {
             this.dataManager.ChangeYear(Number(this.yearSliderOne.value))
         } else {
             this.dataManager.ChangeYear(Number(this.yearSliderTwo.value))
         }
+
+        this.sliderOnInput(isSliderOne);
     }
 
     private changeField(e: Event): void {
-        // Change the button class for "current active style".
-        if (this.previousActiveButton) {
-            this.previousActiveButton.setAttribute("class", "field-button");
-        }
+        // Change the button class for "current active style". Default active is "MeanBMI".
+        this.previousActiveButton.setAttribute("class", "field-button");
         
         let node:HTMLElement = <HTMLElement>e.target;
         node.setAttribute("class", "field-button active");
@@ -99,18 +105,25 @@ export class Controller {
     }
 
     private initDropdown(): void {
-        let countryList:Array<string> = Array.from(this.dataManager.GetCountryList());
+        let countryList: Array<string> = Array.from(this.dataManager.GetCountryList());
+        let sortableList: Array<Array<string>> = [];
 
+        // Get [Code, Name] pair into a sortable array.
         countryList.forEach(element => {
             let countryName: string = this.dataManager.GetCountryName(element);
 
             if (countryName == "") {
                 return;
             }
-            
-            this.countrySelectOne.appendChild(new Option(countryName, element));
-            this.countrySelectTwo.appendChild(new Option(countryName, element));
+            sortableList.push([element, countryName]);
         });
+
+        let sortedList: Array<Array<string>> = sortableList.sort((a,b) => a[1].localeCompare(b[1], "zh-Hans-CN", {sensitivity: "accent"}));
+
+        sortableList.forEach(element => {
+            this.countrySelectOne.appendChild(new Option(element[1], element[0]));
+            this.countrySelectTwo.appendChild(new Option(element[1], element[0]));
+        })
 
         this.isDropdownInitialized = true;
     }
@@ -121,5 +134,28 @@ export class Controller {
 
         this.countrySelectOne.value = this.dataManager.SelectedCountry;
         this.countrySelectTwo.value = this.dataManager.SelectedCountry;
+    }
+
+    private sliderOnInput(isSliderOne: boolean): void {
+        let target: HTMLElement,
+            step: number,
+            width: number,
+            innerText: string;
+
+        if (isSliderOne) {
+            target = document.getElementById("SliderOneOutput");
+            step = (-7 + 91) / 42;
+            width = -91 + (Number(this.yearSliderOne.value)-1975) * step;
+            innerText = this.yearSliderOne.value;
+        } else {
+            target = document.getElementById("SliderTwoOutput");
+            step = (-6 + 92) / 26;
+            width = -92 + (Number(this.yearSliderTwo.value)-1990) * step;
+            innerText = this.yearSliderTwo.value;
+        }
+        
+        let style: string = "left: " + width.toString() + "%";
+        target.setAttribute("style", style);
+        target.innerText = innerText;
     }
 }

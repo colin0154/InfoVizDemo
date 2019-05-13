@@ -52,20 +52,20 @@ export class WorldAtlasView extends View {
             .data(data)
             .attr("d", this.path)
             .attr("class", (d: any) => {
-                if (d.properties.WB_A3 == this.dataManager.SelectedCountry)
+                if (d.properties.ISO_A3 == this.dataManager.SelectedCountry)
                     return "country active";
                 return "country";
             })
             .enter()
             .append("path")
             .attr("class", (d: any) => {
-                if (d.properties.WB_A3 == this.dataManager.SelectedCountry)
+                if (d.properties.ISO_A3 == this.dataManager.SelectedCountry)
                     return "country active";
                 return "country";
             })
             .attr("d", this.path)
             // On mouse click, it will emit an event with correspond country code.
-            .on("click", (d: any) => this.changeCountry(d.properties.WB_A3))
+            .on("click", (d: any) => this.changeCountry(d.properties.ISO_A3))
             .on("mouseover", d => this.mouseOver(d))
             .on("mouseout", d => this.mouseOut());
 
@@ -113,7 +113,7 @@ export class WorldAtlasView extends View {
     }
 
     protected mouseOverContent(data: any): string {
-        let countryCode = data["properties"]["WB_A3"];
+        let countryCode = data["properties"]["ISO_A3"];
         let countryName = this.dataManager.GetCountryName(countryCode);
 
         if (!countryName) {

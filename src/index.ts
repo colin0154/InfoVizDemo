@@ -32,5 +32,5 @@ function Initialize(response: Array<object>)
     let bubbleChart = new BubbleChart();
     let infoSection = new InfoSection();
 
-    dataManager.ChangeYear(2001);
+    dataManager.ChangeYear(2016);
 }

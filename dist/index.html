@@ -66,7 +66,10 @@
                     </div>
                     <div class="TrendCharts">
                         <div class="slider-wrapper">
-                            <input type="range" min="1975" max="2016" name="YearSliderOne" step="1" id="YearSliderOne" class="slider">
+                            <div class="slider-main">
+                                1975<input type="range" min="1975" max="2016" value="2016" name="YearSliderOne" step="1" id="YearSliderOne" class="slider">2016
+                            </div>
+                            <p class="slider-output" id="SliderOneOutput">-91%-7%</p>
                         </div>
                         <svg id="Trend" width="656" height="245" viewBox="0 0 656 245">
                             <g class="Line">
@@ -85,7 +88,10 @@
                         </select>
                     </div>
                     <div class="slider-wrapper-two">
-                        <input type="range" min="1990" max="2016" name="YearSliderTwo" step="1" id="YearSliderTwo" class="slider">
+                        <div class="slider-main">
+                            1990<input type="range" min="1990" max="2016" name="YearSliderTwo" step="1" id="YearSliderTwo" class="slider">2016
+                        </div>
+                        <p class="slider-output" id="SliderTwoOutput">2016</p>
                     </div>
                 </div>
                 <div class="GDP-lower">
@@ -103,7 +109,7 @@
         This div is used to dispatch event in JavaScript, and is with no visual functionality.
         Now my lovely JavaScript object can listen on and dispatch through this DOM element.
     </div>
-    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script src="./scripts/d3.v5.min.js"></script>
     <script type="module" src="./scripts/main.js"></script>
 </body>
 </html>
