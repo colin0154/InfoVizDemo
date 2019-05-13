@@ -2,6 +2,7 @@ import { View } from "./View";
 import { ScaleLinear } from "d3";
 import * as d3 from "d3";
 import { DataManager } from "../Model/DataManager";
+import { Controller } from "../Controller/Controller";
 
 export class TrendChart extends View {
     //#region Property
@@ -28,6 +29,9 @@ export class TrendChart extends View {
     }
     
     protected render(): void {
+        if (Controller.CurrentPageOnGDP) 
+            return;
+            
         let data = this.prepareData();
 
         // Line Generator
@@ -37,7 +41,7 @@ export class TrendChart extends View {
 
         // Draw X any Y axis
         d3.select("svg#Trend > g.xAxis")
-            .attr("transform", "translate(0, 215)")
+            .attr("transform", "translate(0, 180)")
             .call(d3.axisBottom(this.xAxis));
 
         d3.select("svg#Trend > g.yAxis")

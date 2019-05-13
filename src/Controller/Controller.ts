@@ -11,6 +11,8 @@ export class Controller {
     private previousActiveButton: HTMLElement;
     private isDropdownInitialized: boolean;
 
+    public static CurrentPageOnGDP: boolean;
+
     constructor() {
         this.dataManager = DataManager.Instance;
 
@@ -23,6 +25,8 @@ export class Controller {
         this.previousActiveButton = document.getElementById("Mean");
 
         this.isDropdownInitialized = false;
+
+        Controller.CurrentPageOnGDP = false;
 
         this.addListener();
     }
@@ -56,6 +60,11 @@ export class Controller {
         this.yearSliderTwo.value = this.dataManager.SelectedYear.toString();
 
         this.sliderOnInput(!isToGPD);
+
+        // Stop rendering the not visible page.
+        Controller.CurrentPageOnGDP= isToGPD;
+        // Raise event to tell charts to update. Otherwise the charts would still have previous state since last page change.
+        document.getElementById("EventTarget").dispatchEvent(new Event("StateChanged"));
 
         document.getElementById("BMI").style.display = isToGPD ? "none" : "inline-flex";
         document.getElementById("GDP").style.display = isToGPD ? "inline-flex" : "none";
@@ -144,7 +153,7 @@ export class Controller {
 
         if (isSliderOne) {
             target = document.getElementById("SliderOneOutput");
-            step = (-7 + 91) / 42;
+            step = (-7 + 91) / 41;
             width = -91 + (Number(this.yearSliderOne.value)-1975) * step;
             innerText = this.yearSliderOne.value;
         } else {

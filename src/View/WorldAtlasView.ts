@@ -3,6 +3,7 @@ import * as d3 from "d3";
 import { FeatureCollection } from "geojson";
 import { GeoPath, GeoProjection, geoPath, select, scaleDiverging } from "d3";
 import { DataManager } from "../Model/DataManager";
+import { Controller } from "../Controller/Controller";
 
 export class WorldAtlasView extends View {
     //#region Properties
@@ -40,6 +41,9 @@ export class WorldAtlasView extends View {
     }
 
     protected render(): void {
+        if (Controller.CurrentPageOnGDP) 
+            return;
+
         // using Orthographic Projection.
         this.projection = d3.geoOrthographic().translate([656/2, 450/2]).rotate([this.rotationYaw, this.rotationPitch, this.rotationRoll]).scale(this.zoom);
         this.path = d3.geoPath().projection(this.projection);

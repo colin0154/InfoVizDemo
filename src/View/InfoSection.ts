@@ -1,4 +1,5 @@
 import { View } from "./View";
+import { Controller } from "../Controller/Controller";
 
 export class InfoSection extends View {
     private countryDOM: HTMLElement;
@@ -21,6 +22,9 @@ export class InfoSection extends View {
     }
 
     protected render(): void {
+        if (Controller.CurrentPageOnGDP) 
+            return;
+        
         this.countryDOM.innerText = this.dataManager.GetCountryName();
         this.yearDOM.innerText = this.dataManager.SelectedYear.toString();
         this.fieldDOM.innerHTML = this.dataManager.GetFieldValue().toString();

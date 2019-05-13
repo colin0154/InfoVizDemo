@@ -2,6 +2,7 @@ import { View } from "./View";
 import { ScaleLinear } from "d3";
 import * as d3 from "d3";
 import { DataManager } from "../Model/DataManager";
+import { Controller } from "../Controller/Controller";
 
 export class BubbleChart extends View {
     private countryList: Array<string>;
@@ -27,6 +28,9 @@ export class BubbleChart extends View {
     }
 
     protected render(): void {
+        if (!Controller.CurrentPageOnGDP) 
+            return;
+            
         let data: Array<any> = this.prepareData();
         this.setYAxisDomain();
 
