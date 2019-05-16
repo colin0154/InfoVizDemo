@@ -13,10 +13,14 @@
 </head>
 
 <body>
+    <script nomodule>
+        window.alert("当前浏览器版本过低！网页很有可能无法正确加载。\n本项目是在最新版Chrome浏览器下制作的，未测试其他浏览器的兼容性。");
+    </script>
     <div class="flex-container">
         <div class="welcome" id="welcome">
             <button id="startDemo" type="button" disabled>加载中...</button>
             <button id="aboutUs" type="button">关于我们</button>
+            <p>本项目在最新版Chrome浏览器下制作，不能保证其他浏览器的兼容性。</p>
         </div>
         <div class="header">
             <div class="title">
