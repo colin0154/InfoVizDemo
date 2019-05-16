@@ -104,7 +104,7 @@ export class WorldAtlasView extends View {
                 this.rotationPitch -= this.rotationPitch <= -60 ? 0 : finalRotationPitch;
                 break;
             case WorldAtlasView.Rotation.ZoomIn:
-                this.zoom += this.zoom >= 500 ? 0 : 25;
+                this.zoom += this.zoom >= 600 ? 0 : 25;
                 break;
             case WorldAtlasView.Rotation.ZoomOut:
                 this.zoom -= this.zoom <= 200 ? 0 : 25;

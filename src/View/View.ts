@@ -1,5 +1,6 @@
 import { DataManager } from "../Model/DataManager";
 import * as d3 from "d3";
+import { Controller } from "../Controller/Controller";
 
 export abstract class View {
     // Data used to render d3 graphic.
@@ -15,9 +16,11 @@ export abstract class View {
     protected abstract prepareData(): Array<any>;
 
     protected mouseOver(data: any): void {
+        let position: Array<number> = Controller.CurrentPageOnGDP ? [30, 55] : [-55, -40];
+
         d3.select("div#tooltip")
-            .style("left", (d3.event.pageX - 30) + "px")
-            .style("top", (d3.event.pageY - 60) + "px")
+            .style("left", (d3.event.pageX + position[0]) + "px")
+            .style("top", (d3.event.pageY + position[1]) + "px")
                 .transition()
                 .duration(200)
                 .style("opacity", .9);

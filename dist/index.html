@@ -4,18 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>信息可视化大作业Demo</title>
+    <title>BMI世界地图 信息可视化大作业</title>
+    <style>
+        .welcome {
+            background-image: url('./images/background.jpg');
+        }
+    </style>
 </head>
 
 <body>
     <div class="flex-container">
-        <div class="welcome" id="welcome" style="background-image: url('./images/background.jpg');">
+        <div class="welcome" id="welcome">
             <button id="startDemo" type="button" disabled>加载中...</button>
             <button id="aboutUs" type="button">关于我们</button>
         </div>
         <div class="header">
             <div class="title">
-                    <p>标题</p>
+                    <p><b>全球BMI指数变化趋势可视化</b></p>
             </div>
             <div class="nav">
                 <button id="showBMI" type="button" class="active"><p>全球BMI概览</p></button>
@@ -28,13 +33,29 @@
                     <button id="Mean" type="button" class="field-button active">BMI均值</button>
                     <button id="Underweight" type="button" class="field-button">体重过低</button>
                     <button id="Obesity" type="button" class="field-button">肥胖</button>
-                    <button id="Severe" type="button" class="field-button">过度肥胖</button>
+                    <button id="Severe" type="button" class="field-button">重度肥胖</button>
                     <button id="Morbid" type="button" class="field-button">病态肥胖</button>
                 </div>
                 <div class="field-lower">
-                    <p>静态文本</p>
-                    <p>不用生成</p>
-                    <p>直接写就有了</p>
+                    <div class="BMI" id="info-bmi"><p><b>世界卫生组织的BMI标准：</b></p>
+                        <p>体重过低：</p>
+                        <p><18.50</p>
+                        <p>体重正常/超重：</p>
+                        <p>18.50~29.99</p>
+                        <p>肥胖：</p>
+                        <p>30.00~34.99</p>
+                        <p>重度肥胖：</p>
+                        <p>35.00~39.99</p>
+                        <p>病态肥胖：</p>
+                        <p>>40.00</p></div>
+                    <div class="GDP" style="display: none;" id="info-gdp">
+                        <p><b>购买力平价：</b></p>
+                        <p>计算单位为国际元，1国际元在个别国家的购买力等于1美元在美国的购买力。</p>
+                        <p>购买力平价更能反映出不同国家之间的生活水平，与肥胖的关系会更加密切。</p>
+                        <p style="margin-top: 28px;"><b>横轴单位：</b></p>
+                        <p>购买力平价（PPP）衡量的人均GDP（2011年不变价国际元）</p>
+                    </div>
+                    
                 </div>
             </div>
             <div id="BMI" class="content">
@@ -44,12 +65,14 @@
                             <select class="select-country" id="selectDropdownOne">
                             </select>
                         </div>
-                        <p>小人像：<span id="Info-Portrait"></span></p>
+                        <div class="portrait-wrapper">
+                                <img id="Info-Portrait" class="info-portrait" width="194px" height="393px" src="./images/portrait.png" alt="形象化的肥胖程度">
+                        </div>
                     </div>
                     <div class="info-lower section">
                         <p>国家：<span id="Info-Country"></span></p>
                         <p>年份：<span id="Info-Year"></span></p>
-                        <p>BMI数据：<span id="Info-Field"></span></p>
+                        <p id="Info-Field"></p>
                     </div>
                 </div>
                 <div class="charts section">
@@ -60,12 +83,12 @@
                             <g id="Maps"></g>
                         </svg>
                         <div class="buttons">
-                            <button type="button" id="RotateLeft">Left</button>
-                            <button type="button" id="RotateRight">Right</button>
-                            <button type="button" id="RotateUp">Up</button>
-                            <button type="button" id="RotateDown">Down</button>
-                            <button type="button" id="ZoomIn">Zoom In</button>
-                            <button type="button" id="ZoomOut">Zoom Out</button>
+                            <button type="button" id="RotateRight" style="left: -2px; top: -25px;"><p style="left: -2px;"><</p></button>
+                            <button type="button" id="RotateLeft" style="left: 17px; top: -25px;"><p>></p></button>
+                            <button type="button" id="RotateDown" style="left: -36px; top: -50px; transform: rotate(90deg)"><p style="top: -1px;"><</p></button>
+                            <button type="button" id="RotateUp" style="left: -64px; transform: rotate(90deg)"><p style="top: -1px;">></p></button>
+                            <button type="button" id="ZoomIn" style="left: 450px; top: -45px;"><p style="left: -1px; top: -1px;">+</p></button>
+                            <button type="button" id="ZoomOut" style="left: 420px; top: -5px;"><p style="top: -1px;">-</p></button>
                         </div>
                     </div>
                     <div class="TrendCharts">
@@ -76,11 +99,13 @@
                             <p class="slider-output" id="SliderOneOutput">2016</p>
                         </div>
                         <svg id="Trend" width="656" height="210" viewBox="0 0 656 210">
+                            <g class="xAxis"></g>
+                            <g class="yAxis"></g>
+                            <text x="50" y="30" class="axis-label">患病率</text>
+                            <text x="600" y="170" class="axis-label">年份</text>
                             <g class="Line">
                                 <path></path>
                             </g>
-                            <g class="xAxis"></g>
-                            <g class="yAxis"></g>
                         </svg>
                     </div>
                 </div>
@@ -99,10 +124,12 @@
                     </div>
                 </div>
                 <div class="GDP-lower">
-                    <svg id="GDP" width="976px" height="618px" viewBox="0 -10 976 618">
-                        <g class="Bubble"></g>
+                    <svg id="GDP" width="976px" height="628px" viewBox="0 -20 976 618">
                         <g class="xAxis"></g>
                         <g class="yAxis"></g>
+                        <text x="70" y="-10" class="axis-label">患病率</text>
+                        <text x="800" y="550" class="axis-label">人均GDP（购买力平价）</text>
+                        <g class="Bubble"></g>
                     </svg>
                 </div>
             </div>

@@ -68,9 +68,15 @@ export class Controller {
 
         document.getElementById("BMI").style.display = isToGDP ? "none" : "inline-flex";
         document.getElementById("GDP").style.display = isToGDP ? "inline-flex" : "none";
+        
+        document.getElementById("info-bmi").style.display = isToGDP ? "none" : "block";
+        document.getElementById("info-gdp").style.display = isToGDP ? "block" : "none";
 
         document.getElementById("showBMI").setAttribute("class", isToGDP ? "" : "active");
         document.getElementById("showGDP").setAttribute("class", isToGDP ? "active" : "");
+
+        
+        
     }
 
     private changeYear(e: Event, isSliderOne: boolean): void {
@@ -156,13 +162,13 @@ export class Controller {
 
         if (isSliderOne) {
             target = document.getElementById("SliderOneOutput");
-            step = (-7 + 91) / 41;
-            width = -91 + (Number(this.yearSliderOne.value)-1975) * step;
+            step = (-11 + 90) / 41;
+            width = -90 + (Number(this.yearSliderOne.value)-1975) * step;
             innerText = this.yearSliderOne.value;
         } else {
             target = document.getElementById("SliderTwoOutput");
-            step = (-6 + 92) / 26;
-            width = -92 + (Number(this.yearSliderTwo.value)-1990) * step;
+            step = (-7 + 90) / 26;
+            width = -90 + (Number(this.yearSliderTwo.value)-1990) * step;
             innerText = this.yearSliderTwo.value;
         }
         

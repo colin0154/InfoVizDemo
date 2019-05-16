@@ -111,7 +111,8 @@ export class BubbleChart extends View {
     protected mouseOverContent(data: any): string {
         let html: string =
         "<p>" + this.dataManager.GetCountryName(data["Code"]) +"</p>"
-        + "<p>GDP：" + data["GDPPerCapita"] + "</p>";
+        + "<p>患病率：" + data["Field"] + "%"
+        + "<p>GDP：" + data["GDPPerCapita"] + "国际元</p>";
 
         // Determine using ten thousand or million as unit
         // Source data is already using thousand as unit, so a million is 1000;
