@@ -78,6 +78,10 @@ export class TrendChart extends View {
                 .attr("cy", d => this.yAxis(d[1]))
                 .on("mouseover", d => this.mouseOver(d))
                 .on("mouseout", d => this.mouseOut());
+
+        // Change Y axis label accordingly.
+        document.getElementById("YAxisLabelOne").innerHTML = 
+        this.dataManager.SelectedField == DataManager.Field.Mean? "BMI均值" : "患病率";
         }
     
     protected prepareData(): Array<any> {

@@ -59,7 +59,11 @@ export class BubbleChart extends View {
             })
             .on("mouseover", d => this.mouseOver(d))
             .on("mouseout", d => this.mouseOut())
-            .on("click", (d: any) => this.dataManager.ChangeCountry(d["Code"]))
+            .on("click", (d: any) => this.dataManager.ChangeCountry(d["Code"]));
+        
+        // Change Y axis label accordingly.
+        document.getElementById("YAxisLabelTwo").innerHTML = 
+        this.dataManager.SelectedField == DataManager.Field.Mean? "BMI均值" : "患病率";
     }
 
     protected prepareData(): Array<any> {

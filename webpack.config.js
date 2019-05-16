@@ -1,8 +1,9 @@
 const path = require('path');
 
+// Uncomment these section if want sourcemap.
 module.exports = {
   entry: './src/index.ts',
-  devtool: 'inline-source-map',
+  // devtool: 'inline-source-map',
   mode: 'production',
   module: {
     rules: [
@@ -13,7 +14,8 @@ module.exports = {
       },
       {
         test: /\.scss$/,
-        loader: ["style-loader", "css-loader?sourceMap", "sass-loader?sourceMap"]
+        loader: ["style-loader", "css-loader", "sass-loader"]
+        // loader: ["style-loader", "css-loader?sourceMap", "sass-loader?sourceMap"]
       }
     ]
   },
