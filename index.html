@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>BMI世界地图 信息可视化大作业</title>
+    <style>
+        .welcome {
+            background-image: url('./images/background.jpg');
+        }
+    </style>
+</head>
+
+<body>
+    <script nomodule>
+        window.alert("当前浏览器版本过低！网页很有可能无法正确加载。\n本项目是在最新版Chrome浏览器下制作的，未测试其他浏览器的兼容性。");
+    </script>
+    <div class="flex-container">
+        <div class="welcome" id="welcome">
+            <button id="startDemo" type="button" disabled>加载中...</button>
+            <button id="aboutUs" type="button">关于我们</button>
+            <p>本项目在最新版Chrome浏览器下制作，不能保证其他浏览器的兼容性。</p>
+        </div>
+        <div class="header">
+            <div class="title">
+                    <p><b>全球BMI指数变化趋势可视化</b></p>
+            </div>
+            <div class="nav">
+                <button id="showBMI" type="button" class="active"><p>全球BMI概览</p></button>
+                <button id="showGDP" type="button" class=""><p>全球BMI与人均GDP的关系</p></button>
+            </div>    
+        </div>
+        <div class="main">
+            <div class="field section">
+                <div class="field-upper">
+                    <button id="Mean" type="button" class="field-button active">BMI均值</button>
+                    <button id="Underweight" type="button" class="field-button">体重过低</button>
+                    <button id="Obesity" type="button" class="field-button">肥胖</button>
+                    <button id="Severe" type="button" class="field-button">重度肥胖</button>
+                    <button id="Morbid" type="button" class="field-button">病态肥胖</button>
+                </div>
+                <div class="field-lower">
+                    <div class="BMI" id="info-bmi"><p><b>世界卫生组织的BMI标准：</b></p>
+                        <p>体重过低：</p>
+                        <p><18.50</p>
+                        <p>体重正常/超重：</p>
+                        <p>18.50~29.99</p>
+                        <p>肥胖：</p>
+                        <p>30.00~34.99</p>
+                        <p>重度肥胖：</p>
+                        <p>35.00~39.99</p>
+                        <p>病态肥胖：</p>
+                        <p>>40.00</p></div>
+                    <div class="GDP" style="display: none;" id="info-gdp">
+                        <p><b>购买力平价：</b></p>
+                        <p>计算单位为国际元，1国际元在个别国家的购买力等于1美元在美国的购买力。</p>
+                        <p>购买力平价更能反映出不同国家之间的生活水平，与肥胖的关系会更加密切。</p>
+                        <p style="margin-top: 28px;"><b>横轴单位：</b></p>
+                        <p>购买力平价（PPP）衡量的人均GDP（2011年不变价国际元）</p>
+                    </div>
+                    
+                </div>
+            </div>
+            <div id="BMI" class="content">
+                <div class="info">
+                    <div class="info-upper section">
+                        <div class="select-wrapper">
+                            <select class="select-country" id="selectDropdownOne">
+                            </select>
+                        </div>
+                        <div class="portrait-wrapper">
+                                <img id="Info-Portrait" class="info-portrait" width="194px" height="393px" src="./images/portrait.png" alt="形象化的肥胖程度">
+                        </div>
+                    </div>
+                    <div class="info-lower section">
+                        <p>国家：<span id="Info-Country"></span></p>
+                        <p>年份：<span id="Info-Year"></span></p>
+                        <p id="Info-Field"></p>
+                    </div>
+                </div>
+                <div class="charts section">
+                    <div class="WorldMap">
+                        <svg id="WorldAtlas" width="656" height="450" viewBox="0 0 656 450">
+                            <rect width="656" height="450" fill="#F0F0F0"></rect>
+                            <circle id="Ocean" cx="328" cy="225" r="50" fill="#D7D7D7"></circle>
+                            <g id="Maps"></g>
+                        </svg>
+                        <div class="buttons">
+                            <button type="button" id="RotateRight" style="left: -2px; top: -25px;"><p style="left: -2px;"><</p></button>
+                            <button type="button" id="RotateLeft" style="left: 17px; top: -25px;"><p>></p></button>
+                            <button type="button" id="RotateDown" style="left: -36px; top: -50px; transform: rotate(90deg)"><p style="top: -1px;"><</p></button>
+                            <button type="button" id="RotateUp" style="left: -64px; transform: rotate(90deg)"><p style="top: -1px;">></p></button>
+                            <button type="button" id="ZoomIn" style="left: 450px; top: -45px;"><p style="left: -1px; top: -1px;">+</p></button>
+                            <button type="button" id="ZoomOut" style="left: 420px; top: -5px;"><p style="top: -1px;">-</p></button>
+                        </div>
+                    </div>
+                    <div class="TrendCharts">
+                        <div class="slider-wrapper">
+                            <div class="slider-main">
+                                1975<input type="range" min="1975" max="2016" value="2016" name="YearSliderOne" step="1" id="YearSliderOne" class="slider">2016
+                            </div>
+                            <p class="slider-output" id="SliderOneOutput">2016</p>
+                        </div>
+                        <svg id="Trend" width="656" height="210" viewBox="0 0 656 210">
+                            <g class="xAxis"></g>
+                            <g class="yAxis"></g>
+                            <text x="50" y="30" class="axis-label">患病率</text>
+                            <text x="600" y="170" class="axis-label">年份</text>
+                            <g class="Line">
+                                <path></path>
+                            </g>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+            <div id="GDP" class="content section">
+                <div class="GDP-upper">
+                    <div class="select-wrapper">
+                        <select class="select-country" id="selectDropdownTwo">
+                        </select>
+                    </div>
+                    <div class="slider-wrapper-two">
+                        <div class="slider-main">
+                            1990<input type="range" min="1990" max="2016" name="YearSliderTwo" step="1" id="YearSliderTwo" class="slider">2016
+                        </div>
+                        <p class="slider-output" id="SliderTwoOutput">2016</p>
+                    </div>
+                </div>
+                <div class="GDP-lower">
+                    <svg id="GDP" width="976px" height="628px" viewBox="0 -20 976 618">
+                        <g class="xAxis"></g>
+                        <g class="yAxis"></g>
+                        <text x="70" y="-10" class="axis-label">患病率</text>
+                        <text x="800" y="550" class="axis-label">人均GDP（购买力平价）</text>
+                        <g class="Bubble"></g>
+                    </svg>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="tooltip"></div>
+    <div id="EventTarget" style="display:none">
+        This div is used to dispatch event in JavaScript, and is with no visual functionality.
+        Now my lovely JavaScript object can listen on and dispatch through this DOM element.
+    </div>
+    <script src="./scripts/d3.v5.min.js"></script>
+    <script type="module" src="./scripts/main.js"></script>
+</body>
+</html>
