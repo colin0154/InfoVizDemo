@@ -40,6 +40,10 @@ button {
         cursor: default;
     }
 
+    button:active, button:focus {
+        outline: none;
+    }
+
     #startDemo {
         position: absolute;
         left: 548px;

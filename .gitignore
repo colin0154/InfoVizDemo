@@ -5,8 +5,10 @@ package-lock.json
 # Compiled code
 dist/*
 !dist/index.html
+!dist/about.html
 !dist/data
 dist/data/legacy
 !dist/script/flag-icon.min.css
 !dist/flags
+!dist/images
 
