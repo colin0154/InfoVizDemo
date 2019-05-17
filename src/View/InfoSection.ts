@@ -1,12 +1,14 @@
 import { View } from "./View";
 import { Controller } from "../Controller/Controller";
 import { DataManager } from "../Model/DataManager";
+const getCountryISO2 = require("country-iso-3-to-2");
 
 export class InfoSection extends View {
     private countryDOM: HTMLElement;
     private fieldDOM: HTMLElement;
     private yearDOM: HTMLElement;
     private portraitDOM: HTMLElement;
+    private flagDOM: HTMLElement;
 
     constructor() {
         super();
@@ -15,6 +17,7 @@ export class InfoSection extends View {
         this.fieldDOM = document.getElementById("Info-Field");
         this.yearDOM = document.getElementById("Info-Year");
         this.portraitDOM = document.getElementById("Info-Portrait");
+        this.flagDOM = document.getElementById("Info-FlagIcon");
     }
 
     protected addListener(): void {
@@ -26,6 +29,8 @@ export class InfoSection extends View {
     protected render(): void {
         // Upper part of info section.
         this.changePortrait();
+        
+        this.changeFlagIcon();
 
         // Lower part of info section.
         if (Controller.CurrentPageOnGDP) 
@@ -82,5 +87,10 @@ export class InfoSection extends View {
                 this.portraitDOM.setAttribute("style", "object-position: -776px 0");
                 break; 
         }
+    }
+
+    private changeFlagIcon(): void {
+        let html: string = "flag-icon flag-icon-" + this.dataManager.GetCountryCodeA2().toLowerCase();
+        this.flagDOM.setAttribute("class", html);
     }
 }

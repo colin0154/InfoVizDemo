@@ -12,6 +12,10 @@ D3.js的库我是直接在html里引用的，当前版本是D3 v5。假如将来
 
 希望在读的你喜欢这份Demo。
 
+Credit: [flag-icon-css](https://github.com/lipis/flag-icon-css)
+
+不知道要怎么把这套国旗icon跟npm以及webpack(这是重点)整合起来，就直接手动复制源文件了。笨方法也是个方法。
+
 ## 下载安装
 
 ~~~Shell

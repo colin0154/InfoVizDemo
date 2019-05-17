@@ -7,4 +7,6 @@ dist/*
 !dist/index.html
 !dist/data
 dist/data/legacy
+!dist/script/flag-icon.min.css
+!dist/flags
 
