@@ -7,6 +7,7 @@ body {
     display: flex;
     align-items: center;
     background-color: $background-color;
+    color: #333333;
 }
 
 button {
@@ -270,6 +271,8 @@ button {
                         width: 25px;
                         border-radius: 25px;
                         position: relative;
+                        background-position: center;
+                        background-repeat: no-repeat;
 
                         p {
                             position: relative;
@@ -287,8 +290,41 @@ button {
                     button:active {
                         box-shadow: 0px 0px 0px 1px $primary-color;
                     }
-                }
-                
+
+                    #RotateLeft {
+                        left: 17px;
+                        top: -25px;
+                        transform: rotate(90deg);
+                    }
+
+                    #RotateRight {
+                        left: -2px;
+                        top: -25px;
+                        transform: rotate(270deg);
+                    }
+                    
+                    #RotateUp {
+                        left: -66px;
+                        transform: rotate(180deg);
+                    }
+                    
+                    #RotateDown {
+                        left: -36px;
+                        top: -50px;
+                    }
+                    
+                    #ZoomIn {
+                        left: 450px;
+                        top: -45px;
+                        background-size: 90%;
+                    }
+                    
+                    #ZoomOut {
+                        left: 420px;
+                        top: -5px;
+                        background-size: 90%;
+                    }
+                }    
             }
 
             .TrendCharts {

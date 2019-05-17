@@ -1,7 +1,6 @@
 import { View } from "./View";
 import { Controller } from "../Controller/Controller";
 import { DataManager } from "../Model/DataManager";
-const getCountryISO2 = require("country-iso-3-to-2");
 
 export class InfoSection extends View {
     private countryDOM: HTMLElement;
