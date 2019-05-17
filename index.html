@@ -10,6 +10,7 @@
             background-image: url('./images/background.jpg');
         }
     </style>
+    <link rel="stylesheet" href="./scripts/flag-icon.min.css">
 </head>
 
 <body>
@@ -72,6 +73,7 @@
                         <div class="portrait-wrapper">
                                 <img id="Info-Portrait" class="info-portrait" width="194px" height="393px" src="./images/portrait.png" alt="形象化的肥胖程度">
                         </div>
+                        <div class="flag-icon" id="Info-FlagIcon"></div>
                     </div>
                     <div class="info-lower section">
                         <p>国家：<span id="Info-Country"></span></p>
@@ -87,12 +89,12 @@
                             <g id="Maps"></g>
                         </svg>
                         <div class="buttons">
-                            <button type="button" id="RotateRight" style="left: -2px; top: -25px;"><p style="left: -2px;"><</p></button>
-                            <button type="button" id="RotateLeft" style="left: 17px; top: -25px;"><p>></p></button>
-                            <button type="button" id="RotateDown" style="left: -36px; top: -50px; transform: rotate(90deg)"><p style="top: -1px;"><</p></button>
-                            <button type="button" id="RotateUp" style="left: -64px; transform: rotate(90deg)"><p style="top: -1px;">></p></button>
-                            <button type="button" id="ZoomIn" style="left: 450px; top: -45px;"><p style="left: -1px; top: -1px;">+</p></button>
-                            <button type="button" id="ZoomOut" style="left: 420px; top: -5px;"><p style="top: -1px;">-</p></button>
+                            <button type="button" id="RotateRight" style="background-image: url(./images/rotation_button.png)"></button>
+                            <button type="button" id="RotateLeft" style="background-image: url(./images/rotation_button.png)"></button>
+                            <button type="button" id="RotateDown" style="background-image: url(./images/rotation_button.png)"></button>
+                            <button type="button" id="RotateUp" style="background-image: url(./images/rotation_button.png)"></p></button>
+                            <button type="button" id="ZoomIn" style="background-image: url(./images/zoom_in.png)"></button>
+                            <button type="button" id="ZoomOut" style="background-image: url(./images/zoom_out.png)"></button>
                         </div>
                     </div>
                     <div class="TrendCharts">
